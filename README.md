@@ -27,10 +27,10 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 ## ＜演習内容＞
 
 * **[演習 1: GraalVMとMicronautによるマイクロサービス作成](#演習-1-GraalVMとMicronautによるマイクロサービス作成)**
-   * [1.1: GraalVM EE20.1.0のダウンロード](#11-GraalVM-EE2010のダウンロード)
-   * [1.2: GraalVM Coreパッケージのインストール](#12-GraalVM-Coreパッケージのインストール)
-   * [1.3: Native Imageのインストール](#13-Native-Imageのインストール)
-   * [1.4: LLVMとR言語プラグインのインストール](#14-LLVMとR言語プラグインのインストール)
+   * [1.1: Micronautアプリケーションの導入](#11-Micronautアプリケーションの導入)
+   * [1.2: GraalVMを使用してNative Imageを作成](#12-GraalVMを使用してNativeImageを作成)
+   * [1.3: GraalVMとDockerでNative Imageを作成](#13-GraalVMとDockerでNativeImageを作成)
+   
 
 * **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-1-GraalVMとSpringBootによるマイクロサービス作成)**
 * **[演習 3: Native Imageの生成と実行](#演習-3-Native-Imageの生成と実行)**
