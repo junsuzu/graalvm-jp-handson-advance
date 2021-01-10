@@ -86,15 +86,20 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Produces;
 
-@Controller("/hello") 
+@Controller("/hello")  //①
 public class HelloController {
-    @Get 
-    @Produces(MediaType.TEXT_PLAIN) 
+    @Get //②
+    @Produces(MediaType.TEXT_PLAIN)  //③
     public String index() {
-        return "Hello World"; 
+        return "Hello World"; //④
     }
 }
 ```
+* ① @Controller アノテーションがコントローラーを定義し、/helloというリクエスト・パスに対応します。  
+* ② @Get アノテーションは下記index メソッドをすべてのHTTP Getリクエストに対応するようにマッピングします。
+* ③ デフォルトではMicronautアプリのリスポンスのContentTypeはapplicaiton/jasonです。ここではJSONオブジェクトの代わりにStringをリターンしますので、text/plain を明示的に指定します。
+* ④　"Hello World"　をリターンします。
+
 (4)このMicronautアプリケーションを起動します。
 
   >```sh
@@ -187,159 +192,83 @@ $ ./build/native-image/application
 
 # 1.3: GraalVMとDockerでNative Imageを作成
 
-(1)各モジュールをダウンロードした後、ダウンロード先のディレクトリーにて以下のコマンドを実行し、Coreパッケージを解凍します。
+(1)Dockerデーモンを起動します。本演習の環境ではWindowsのDocker DesktopをDockerデーモンとして2375番ポートでオープンします。Ubuntu側のDockerクライアントはそのデーモンに接続します。下記はDocker Desktopのsetting画面です。
+
+![Download Picture 2](images/GraalVMadvance02.JPG)
+
+(2)以下のコマンドを実行し、Docker内でnative imageを作成します。
+
   >```sh
-  >tar -zxf graalvm-ee-java8-linux-amd64-20.1.0.tar.gz
+  >$ ./gradlew dockerBuild
   >```
 <br/>
-上記コマンドの実行により”graalvm-ee-java8-20.1.0”というフォルダーが作成されます。
-    
-![Download Picture 6](images/GraalVMinstall06.JPG)
+以下のようにDockerのビルドが正常に終了していることを確認します。
 
-<br/>
-フォルダーを任意のディレクトリーに移動します。そのディレクトリー配下がGraalVMのインストール先(Java Home)となります。下記の例ではフォルダーを/optの配下に移動する例です：
+```
+$ ./gradlew dockerBuild
 
+> Task :dockerfile
+Dockerfile written to: /home/linuser/handson/creating-your-first-micronaut-app/complete/build/docker/Dockerfile
+
+> Task :dockerBuild
+Building image using context '/home/linuser/handson/creating-your-first-micronaut-app/complete'.
+Using Dockerfile '/home/linuser/handson/creating-your-first-micronaut-app/complete/build/docker/Dockerfile'
+Using images 'complete'.
+Step 1/7 : FROM openjdk:15-alpine
+ ---> f02adfce91a2
+Step 2/7 : WORKDIR /home/app
+ ---> Using cache
+ ---> 052c899af729
+Step 3/7 : COPY build/layers/libs /home/app/libs
+ ---> Using cache
+ ---> 0014ade92408
+Step 4/7 : COPY build/layers/resources /home/app/resources
+ ---> Using cache
+ ---> ee23a89788fd
+Step 5/7 : COPY build/layers/application.jar /home/app/application.jar
+ ---> 70b4e26ea04b
+Step 6/7 : EXPOSE 8080
+ ---> Running in fc0eecaa78ef
+Removing intermediate container fc0eecaa78ef
+ ---> abd8ce32429d
+Step 7/7 : ENTRYPOINT ["java", "-jar", "/home/app/application.jar"]
+ ---> Running in de8723a37b41
+Removing intermediate container de8723a37b41
+ ---> e5ca0570af3e
+Successfully built e5ca0570af3e
+Successfully tagged complete:latest
+Created image with ID 'e5ca0570af3e'.
+
+BUILD SUCCESSFUL in 16s
+6 actionable tasks: 2 executed, 4 up-to-date
+linuser@JUNSUZU-JP:~/handson/creating-your-first-micronaut-app/complete$
+
+```
+
+(3)Dockerコンテナを起動します。
+```
+$ docker run -p 8080:8080 complete
+04:17:28.943 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1441ms. Server Running: http://e1a0e02a8b2d:8080
+
+```
+別ターミナルを立ち上げ、起動中のDockerサービスに対してリクエストを送ってみます。レスポンスのHello Worldが表示されることを確認します。
   >```sh
-  >sudo mv graalvm-ee-java8-20.1.0 /opt/.
-  >```
-
-これにより、GraalVMのインストール・ディレクトリー（Java Home)は/opt/graalvm-ee-java8-20.1.0になります。
-
-<br/>
-
-(2)インストールしたGraalVMのパスを通すためには、以下のコマンドを実行します。
-
-bashの場合
-  >```sh
-  >vi ~/.bashrc
-  >```
-zshの場合
-  >```sh
-  >vi ~/.zshrc
-  >```
-
-
-以下の行を ~/.zshrc もしくは ~/.bashrc に追加します。
-  >```sh
-  >export GRAALVM_HOME=/opt/graalvm-ee-java8-20.1.0
-  >export PATH=$GRAALVM_HOME/bin:$PATH
-  >export JAVA_HOME=$GRAALVM_HOME
-  >```
-
-ファイルを修正後、以下のコマンドで実行します。
-
-bashの場合
-  >```sh
-  >source ~/.bashrc
-  >```
-zshの場合
-  >```sh
-  >source ~/.zshrc
-  >```
-
-以上でGraalVM Coreパッケージのインストールが完了しました。確認するため以下のjavaコマンドを実行します。
-  >```sh
-  >java –version
-  >```
-
-<br/>
-以下の出力結果を確認できれば、GraalVM 20.1.0 for Java8が正常にインストールされたことになります。
-
-  >```sh
-  >Java(TM) SE Runtime Environment (build 1.8.0_251-b08)
-  >Java HotSpot(TM) 64-Bit Server VM GraalVM EE 20.1.0 (build 25.251-b08-jvmci-20.1-b02, mixed mode)
+  >$ curl localhost:8080/hello  
+  >Hello World
   >```
 <br/>
 
-# 1.3: Native Imageのインストール
-
-(1)　Native ImageをインストールするのにGraalVM Utility(gu)を使用します。モジュールのダウンロード先にて下記コマンドを実行します。
-  >```sh
-  >gu install -L native-image-installable-svm-svmee-java8-darwin-amd64-20.1.0.jar
-  >```
-
-(2) Native Image依存ライブラリーのインストール
-
-Native Imageの生成と実行は、以下３つのライブラリーが必要です。  
-* glibc-devel: Cライブラリーの使用に必要なヘッダーとオブジェクトファイル
-* zlib-devel: zip や gzip ライブラリーの使用に必要なヘッダーファイル
-* gcc: C/C++など複数言語のコンパイラ集  
-
-OSによりインストール・コマンドは異なります：  
-
-Ubuntu
-  >```sh
-  >sudo apt-get install build-essential libz-dev zlib1g-dev
-  >```
-
-Oracle Linux
-  >```sh
-  >sudo yum install gcc glibc-devel zlib-devel
-  >```
-その他Linux
-  >```sh
-  >sudo dnf install gcc glibc-devel zlib-devel libstdc++-static
-  >```
-MacOS
-  >```sh
-  >xcode-select --install
-  >
-<br/>
-
-# 1.4: LLVMとR言語プラグインのインストール
-
-(1)LLVM-toolchainプラグインのインストール  
-以下のコマンドを実行し、必要なモジュールを自動的にgithubよりダウンロードされます。
-  >```sh
-  >gu install llvm-toolchain
-  >```
-(2)R言語プラグインのインストール  
-以下のコマンドを実行し、必要なモジュールを自動的にgithubよりダウンロードされます。
-  >```sh
-  >gu install R
-  >```
-
-(3)R言語ソースのコンフィグ  
-
-以下のコマンドでR言語ソースのコンフィグ作業を実施します。
-  >```sh
-  >/opt/graalvm-ee-java8-20.1.0/jre/languages/R/bin/configure_fastr
-  >```
-
-以下の出力結果を確認します。
-
- 
-    The basic configuration of FastR was successfull.
-
-    Note: if you intend to install R packages you may need additional dependencies.
-    The following packages should cover depenedencies of the most commonly used R packages:
-    On Debian based systems: apt-get install build-essential gfortran libxml2 libc++-dev
-    On Oracle Linux: yum groupinstall 'Development Tools' && yum install gcc-gfortran
-
-    Default personal library directory (/home/mluther/R/x86_64-pc-linux-gnu-library/fastr-20.1.0-3.6) does exist. Do you wish to create it? (Yy/Nn) y
-    Creating personal library directory: /home/mluther/R/x86_64-pc-linux-gnu-library/fastr-20.1.0-3.6
-    DONE
-
-<br/>
-インストール完了後、以下のguコマンドでインストールされたモジュールを確認します：
-
-  >```sh
-  >gu list
-  >```
-
-![Download Picture 7](images/GraalVMinstall07.JPG)
-
-
-<br/>
-<br/>
-お疲れ様でした！以上でインストール作業はすべて完了しました。演習１では以下のタスクを実施しました。
-
-1.	GraalVM EE20.1.0 for Java8のCoreパッケージのインストールおよびクラスパスの設定
-2. Native Imageおよび依存ライブラリーのインストール
-3. LLVMとR言語のインストール
-
-<br/>
-<br/>
+Docker コンテナとDocker Imageを確認できます。
+```
+$ docker ps -l
+CONTAINER ID   IMAGE      COMMAND                  CREATED         STATUS         PORTS                    NAMES
+e1a0e02a8b2d   complete   "java -jar /home/app…"   3 minutes ago   Up 3 minutes   0.0.0.0:8080->8080/tcp   unruffled_golick
+```
+```
+$ docker images
+REPOSITORY    TAG         IMAGE ID       CREATED          SIZE
+complete      latest      e5ca0570af3e   17 minutes ago   357MB
+```
 
 # 演習 2: High-performance JIT コンパイラ
 以下の演習は「Top 10 Things To Do With GraalVM」 の内容を使用します。  
