@@ -41,9 +41,12 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 # 演習-1-GraalVMとMicronautによるマイクロサービス作成
 
-以下はGraalVM Enterprise Edition 20.1.0 for JDK 8をインストール手順となります。
+この演習では、以下の内容を実施します。  
+* Micronautアプリケーションの導入と稼働確認
+* GraalVMでMicronautアプリのnative imageの作成と稼働確認
+* native imageをベースにDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 
-# 1.1: GraalVMを使用してNative Imageを作成
+# 1.1: Micronautアプリケーションの導入
 
 (1)下記GitリポジトリーよりMicronautのサンプルアプリケーションをダウンロードします。
 
@@ -59,7 +62,70 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
   >```
 <br/>
 
-(3) Basic編演習で導入したGraalVMのバージョンを再確認します。(GraalVMのバージョンは20.1.0以上であれば問題ありません。)
+(3)導入したMicronautアプリケーションにはMicronautのメインアプリケーションおよびマイクロサービスの内容をそれぞれ確認します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。
+  
+src/main/java/example/micronaut/Application.java
+```java
+package example.micronaut;
+
+import io.micronaut.runtime.Micronaut;
+
+public class Application {
+
+    public static void main(String[] args) {
+        Micronaut.run(Application.class);
+    }
+}
+```  
+src/main/java/example/micronaut/HelloController.java
+```java
+package example.micronaut;
+
+import io.micronaut.http.MediaType;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.Produces;
+
+@Controller("/hello") 
+public class HelloController {
+    @Get 
+    @Produces(MediaType.TEXT_PLAIN) 
+    public String index() {
+        return "Hello World"; 
+    }
+}
+```
+(4)このMicronautアプリケーションを起動します。
+
+  >```sh
+  >$ gradlew run
+  >```
+<br/>
+Micronautによるマイクロサービスが起動していることを確認します。
+
+```
+Starting a Gradle Daemon (subsequent builds will be faster)
+
+> Task :compileJava
+Note: Creating bean classes for 1 type elements
+
+> Task :run
+12:55:57.718 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 2583ms. Server Running: http://localhost:8080
+<=========----> 75% EXECUTING [3m 55s]                                                      > :run
+```
+
+別ターミナルを立ち上げ、マイクロサービスにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
+
+```
+$ curl http://localhost:8080/hello
+Hello World
+```
+マイクロサービスをCtrl+Cで停止します。  
+<br/>
+
+# 1.2: GraalVMを使用してNative Imageを作成
+
+(1) Basic編演習で導入したGraalVMのバージョンを再確認します。(GraalVMのバージョンは20.1.0以上であれば問題ありません。)
 
   >```sh
   >$ java -version  
@@ -72,7 +138,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
   >
 <br/>
 
-(4)GraalVMを使用し、MicronautサンプルアプリケーションのNative Imageを作成します。  
+(2)GraalVMを使用し、MicronautサンプルアプリケーションのNative Imageを作成します。  
 
 
   >```sh
@@ -93,7 +159,7 @@ mavenでビルドする場合、下記コマンドを使用します。
 gradleを利用しビルドした結果、build/native-image/配下にapplicationという名前のNative Imageが作成されていることが確認できます。  
 mavenを利用した場合、./target配下となります。  
 
-(5)作成したMicronautアプリケーションのNative Imageを動かしてみましょう。  
+(3)作成したMicronautアプリケーションのNative Imageを動かしてみましょう。  
 * gradleの場合
   >```sh
   >$ ./build/native-image/application  
@@ -103,9 +169,12 @@ mavenを利用した場合、./target配下となります。
   >$ ./target/application  
   >```
 
-アプリケーション起動した結果、下図のように8080番ポートでMicronautアプリケーションのサービスが短い時間で起動していることが確認できます。
+アプリケーション起動した結果、8080番ポートでMicronautアプリケーションのサービスが短い時間で起動していることが確認できます。
+```
+$ ./build/native-image/application
+13:22:50.338 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 571ms. Server Running: http://localhost:8080
+```
 
-![Download Picture 2](images/GraalVMadvance02.JPG)
 別ターミナルを立ち上げ、起動中のサービスに対してリクエストを送ってみます。レスポンスのHello Worldが表示されることを確認します。
   >```sh
   >$ curl localhost:8080/hello  
@@ -113,8 +182,10 @@ mavenを利用した場合、./target配下となります。
   >```
 <br/>
 
+マイクロサービスをCtrl+Cで停止します。  
+<br/>
 
-# 1.2: GraalVMとDockerでNative Imageを作成
+# 1.3: GraalVMとDockerでNative Imageを作成
 
 (1)各モジュールをダウンロードした後、ダウンロード先のディレクトリーにて以下のコマンドを実行し、Coreパッケージを解凍します。
   >```sh
