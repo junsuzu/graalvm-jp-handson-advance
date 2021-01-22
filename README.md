@@ -18,7 +18,9 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 ## ＜前提環境／事前準備＞
 * ハンズオンの内容はWindows10でWSL(Windows Subsystem for Linux)を利用し、LinuxディストリビューションのUbuntu20.04をインストールした環境を前提に進みます。  
 * Ubuntu以外のLinuxおよびMacOS、Windowsもサポートされます。
-* Githubリポジトリーからダウンロードすることがあるので、インターネットに繋がる状態が必要です。  
+* Docker Client: Docker Engine Community 20.10.1 
+* Docker Server: Docker Engine Community 20.10.2 (Docker Desktop) 
+* IntelliJ IDEA Community 2020.3
 
 ※「Oracle GraalVM Enterprise Virtual Hands-On Lab」の参加者は基本的に事前セットアップ済みの環境でハンズオン演習を実施して頂きます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
 <br/>
@@ -45,6 +47,12 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * Micronautアプリケーションの導入と稼働確認
 * GraalVMでMicronautアプリのnative imageの作成と稼働確認
 * native imageをベースにDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+
+この演習を実施するためには、以下のソフトを導入します。  
+* Micronaut ([SDKmanによるインストール](https://micronaut.io/download.html))
+* GraalVM EE 20.1.0 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/))
+* Docker CE([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
+* Docker DeskTop([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 
 # 1.1: Micronautアプリケーションの導入
 
@@ -103,7 +111,7 @@ public class HelloController {
 (4)このMicronautアプリケーションを起動します。
 
   >```sh
-  >$ gradlew run
+  >$ ./gradlew run
   >```
 <br/>
 Micronautによるマイクロサービスが起動していることを確認します。
