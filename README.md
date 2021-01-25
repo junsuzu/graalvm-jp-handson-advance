@@ -54,23 +54,25 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * Docker CE([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 * Docker DeskTop([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 
-# 1.1: Micronautアプリケーションの導入
+# 1.1: Micronautアプリケーションの作成
 
-(1)下記GitリポジトリーよりMicronautのサンプルアプリケーションをダウンロードします。
+(1) Micronautアプリケーションの作成  
 
+任意のディレクトリーを作成し、その配下にMicronaut CLI(Command Line Interface)を利用してMicronautプロジェクトexample.micronaut.completeを作成します。
   >```sh
-  >$ git clone https://github.com/micronaut-guides/creating-your-first-micronaut-app.git
+  >$ mn create-app example.micronaut.complete
   >```
+
+![Download Picture 4](images/GraalVMadvance04.JPG)
+上記コマンドより、completeフォルダが作成されていることをご確認ください。
 <br/>
 
-(2)作成済みのソースコードを含む下記ディレクトリへ移動します。
+(2)IntelliJ IDEAから上記(1)で作成したアプリケーションをカスタマイズし、Micronautコントローラーを追加します。  
+IntelliJ IDEAからcompleteフォルダーを開き、src>main>java>example.microanutパッケージの配下に新規JAVAソースファイルHelloController.javaを作成します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。
 
-  >```sh
-  >$ cd micronaut-creating-first-graal-app/complete
-  >```
-<br/>
+![Download Picture 5](images/GraalVMadvance05.JPG)
 
-(3)導入したMicronautアプリケーションにはMicronautのメインアプリケーションおよびマイクロサービスの内容をそれぞれ確認します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。
+既存のApplicationおよび新規作成のHelloControllerのソースはそれぞれ下記をご確認ください。IntelliJ IDEA上ソースを作成したら、Ctrl+Sで保存します。
   
 src/main/java/example/micronaut/Application.java
 ```java
@@ -108,32 +110,26 @@ public class HelloController {
 * ③ デフォルトではMicronautアプリのリスポンスのContentTypeはapplicaiton/jasonです。ここではJSONオブジェクトの代わりにStringをリターンしますので、text/plain を明示的に指定します。
 * ④　"Hello World"　をリターンします。
 
-(4)このMicronautアプリケーションを起動します。
+(4)IntelliJ IDEA上Javaソースを保存したら、UbuntuターミナルからMicronautアプリケーションをbuildした後、起動します。以降のコマンドはすべてcomplete配下で実行してください。
 
   >```sh
-  >$ ./gradlew run
+  >$ ./gradlew run -t
   >```
-<br/>
-Micronautによるマイクロサービスが起動していることを確認します。
+出力結果をご確認ください。
 
-```
-Starting a Gradle Daemon (subsequent builds will be faster)
+  >```
+  >linuser@JUNSUZU-JP:~/work/complete$ java -jar ./build/libs/complete-0.1-all.jar
+>15:55:55.420 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 5915ms. Server Running: http://localhost:8080
+  >```
+Microanutアプリケーションの起動時間をメモっておきます。
 
-> Task :compileJava
-Note: Creating bean classes for 1 type elements
-
-> Task :run
-12:55:57.718 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 2583ms. Server Running: http://localhost:8080
-<=========----> 75% EXECUTING [3m 55s]                                                      > :run
-```
-
-別ターミナルを立ち上げ、マイクロサービスにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
+別ターミナルを立ち上げ、アプリケーションにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
 
 ```
 $ curl http://localhost:8080/hello
 Hello World
 ```
-マイクロサービスをCtrl+Cで停止します。  
+アプリケーションをCtrl+Cで停止します。  
 <br/>
 
 # 1.2: GraalVMを使用してNative Imageを作成
@@ -207,13 +203,13 @@ $ ./build/native-image/application
 (2)以下のコマンドを実行し、Docker内でnative imageを作成します。
 
   >```sh
-  >$ ./gradlew dockerBuild
+  >$ ./gradlew dockerBuildNative
   >```
 <br/>
 以下のようにDockerのビルドが正常に終了していることを確認します。
 
 ```
-$ ./gradlew dockerBuild
+$ ./gradlew dockerBuildNative
 
 > Task :dockerfile
 Dockerfile written to: /home/linuser/handson/creating-your-first-micronaut-app/complete/build/docker/Dockerfile
