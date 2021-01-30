@@ -29,7 +29,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 ## ＜演習内容＞
 
 * **[演習 1: GraalVMとMicronautによるマイクロサービス作成](#演習-1-GraalVMとMicronautによるマイクロサービス作成)**
-   * [1.1: Micronautアプリケーションの導入](#11-Micronautアプリケーションの導入)
+   * [1.1: Micronautアプリケーションの作成と起動](#11-Micronautアプリケーションの作成と起動)
    * [1.2: GraalVMを使用してNative Imageを作成](#12-GraalVMを使用してNative-Imageを作成)
    * [1.3: GraalVMとDockerでNative Imageを作成](#13-GraalVMとDockerでNative-Imageを作成)
    
@@ -54,7 +54,9 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * Docker CE([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 * Docker DeskTop([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
 
-# 1.1: Micronautアプリケーションの作成
+</br>
+
+# 11-Micronautアプリケーションの作成と起動
 
 (1) Micronautアプリケーションの作成  
 
