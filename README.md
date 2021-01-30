@@ -66,6 +66,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
   >```
 
 ![Download Picture 4](images/GraalVMadvance04.JPG)
+
 上記コマンドより、completeフォルダが作成されていることをご確認ください。
 <br/>
 
