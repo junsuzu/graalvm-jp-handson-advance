@@ -191,7 +191,7 @@ $ ./build/native-image/application
   >```
 <br/>
 
-マイクロサービスをCtrl+Cで停止します。  
+アプリケーションをCtrl+Cで停止します。  
 <br/>
 
 # 1.3: GraalVMとDockerでNative Imageを作成
@@ -200,7 +200,18 @@ $ ./build/native-image/application
 
 ![Download Picture 2](images/GraalVMadvance02.JPG)
 
-(2)以下のコマンドを実行し、Docker内でnative imageを作成します。
+(2)complete配下のbuild.gradleを修正し、下記定義を追加し、ファイルを保存します。  
+
+  >```sh
+  >  dockerfileNative {
+  >  baseImage = "gcr.io/distroless/cc-debian10"
+  >  }
+  >  nativeImage {
+  >  args("-H:+StaticExecutableWithDynamicLibC")
+  >  }
+  >```
+
+(3)Docker内でnative imageを作成します。complete配下に以下を実行します。
 
   >```sh
   >$ ./gradlew dockerBuildNative
