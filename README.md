@@ -183,6 +183,7 @@ mavenを利用した場合、./target配下となります。
 $ ./build/native-image/application
 13:22:50.338 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 571ms. Server Running: http://localhost:8080
 ```
+native imageの起動時間と上記演習1.1で通常のJavaアプリケーションの起動時間と比較し、native image起動の速さを確認します。  
 
 別ターミナルを立ち上げ、起動中のサービスに対してリクエストを送ってみます。レスポンスのHello Worldが表示されることを確認します。
   >```sh
@@ -206,12 +207,13 @@ $ ./build/native-image/application
   >  dockerfileNative {
   >  baseImage = "gcr.io/distroless/cc-debian10"
   >  }
+  >
   >  nativeImage {
   >  args("-H:+StaticExecutableWithDynamicLibC")
   >  }
   >```
 
-(3)Docker内でnative imageを作成します。complete配下に以下を実行します。
+(3)Docker内でnative imageを作成します。complete配下で以下のコマンドを実行します。
 
   >```sh
   >$ ./gradlew dockerBuildNative
@@ -222,50 +224,85 @@ $ ./build/native-image/application
 ```
 $ ./gradlew dockerBuildNative
 
-> Task :dockerfile
-Dockerfile written to: /home/linuser/handson/creating-your-first-micronaut-app/complete/build/docker/Dockerfile
+> Task :dockerfileNative
+Dockerfile written to: /home/linuser/work/complete/build/docker/DockerfileNative
 
-> Task :dockerBuild
-Building image using context '/home/linuser/handson/creating-your-first-micronaut-app/complete'.
-Using Dockerfile '/home/linuser/handson/creating-your-first-micronaut-app/complete/build/docker/Dockerfile'
+> Task :dockerBuildNative
+Building image using context '/home/linuser/work/complete'.
+Using Dockerfile '/home/linuser/work/complete/build/docker/DockerfileNative'
 Using images 'complete'.
-Step 1/7 : FROM openjdk:15-alpine
- ---> f02adfce91a2
-Step 2/7 : WORKDIR /home/app
- ---> Using cache
- ---> 052c899af729
-Step 3/7 : COPY build/layers/libs /home/app/libs
- ---> Using cache
- ---> 0014ade92408
-Step 4/7 : COPY build/layers/resources /home/app/resources
- ---> Using cache
- ---> ee23a89788fd
-Step 5/7 : COPY build/layers/application.jar /home/app/application.jar
- ---> 70b4e26ea04b
-Step 6/7 : EXPOSE 8080
- ---> Running in fc0eecaa78ef
-Removing intermediate container fc0eecaa78ef
- ---> abd8ce32429d
-Step 7/7 : ENTRYPOINT ["java", "-jar", "/home/app/application.jar"]
- ---> Running in de8723a37b41
-Removing intermediate container de8723a37b41
- ---> e5ca0570af3e
-Successfully built e5ca0570af3e
+Step 1/10 : FROM ghcr.io/graalvm/graalvm-ce:java8-21.0.0 AS graalvm
+ ---> b16c825a27d5
+Step 2/10 : RUN gu install native-image
+ ---> Running in 12b7541f509d
+Downloading: Component catalog from www.graalvm.org
+Processing Component: Native Image
+Downloading: Component native-image: Native Image  from github.com
+Installing new component: Native Image (org.graalvm.native-image, version 21.0.0)
+Refreshed alternative links in /usr/bin/
+Removing intermediate container 12b7541f509d
+ ---> fbb638ac0eec
+Step 3/10 : WORKDIR /home/app
+ ---> Running in 6d6e83ccde66
+Removing intermediate container 6d6e83ccde66
+ ---> 026389920310
+Step 4/10 : COPY build/layers/libs /home/app/libs
+ ---> f578c3bf7b3c
+Step 5/10 : COPY build/layers/resources /home/app/resources
+ ---> 6357d0efca7d
+Step 6/10 : COPY build/layers/application.jar /home/app/application.jar
+ ---> 8bea9004a758
+Step 7/10 : RUN native-image -H:+StaticExecutableWithDynamicLibC -H:Class=example.micronaut.Application -H:Name=application --no-fallback -cp /home/app/libs/*.jar:/home/app/resources:/home/app/application.jar
+ ---> Running in ea875cb029c9
+[application:20]    classlist:   7,182.37 ms,  1.54 GB
+[application:20]        (cap):     881.12 ms,  2.15 GB
+[application:20]        setup:   3,000.94 ms,  2.15 GB
+[application:20]     (clinit):   1,006.71 ms,  2.53 GB
+[application:20]   (typeflow):  41,681.63 ms,  2.53 GB
+[application:20]    (objects):  27,847.59 ms,  2.53 GB
+[application:20]   (features):   2,351.08 ms,  2.53 GB
+[application:20]     analysis:  75,210.73 ms,  2.53 GB
+[application:20]     universe:   2,866.95 ms,  2.53 GB
+[application:20]      (parse):  11,273.21 ms,  2.35 GB
+[application:20]     (inline):  15,611.99 ms,  2.75 GB
+[application:20]    (compile):  66,151.20 ms,  2.90 GB
+[application:20]      compile:  95,776.74 ms,  2.90 GB
+[application:20]        image:   8,211.37 ms,  2.77 GB
+[application:20]        write:   2,427.36 ms,  2.77 GB
+[application:20]      [total]: 195,062.43 ms,  2.77 GB
+Removing intermediate container ea875cb029c9
+ ---> f5a92c52b9a2
+Step 8/10 : FROM gcr.io/distroless/cc-debian10
+ ---> fd0fdc7125b0
+Step 9/10 : COPY --from=graalvm /home/app/application /app/application
+ ---> d47cfb74a005
+Step 10/10 : ENTRYPOINT ["/app/application"]
+ ---> Running in 8e58749cb38f
+Removing intermediate container 8e58749cb38f
+ ---> 6ffb95f82e79
+Successfully built 6ffb95f82e79
 Successfully tagged complete:latest
-Created image with ID 'e5ca0570af3e'.
+Created image with ID '6ffb95f82e79'.
 
-BUILD SUCCESSFUL in 16s
+BUILD SUCCESSFUL in 3m 53s
 6 actionable tasks: 2 executed, 4 up-to-date
-linuser@JUNSUZU-JP:~/handson/creating-your-first-micronaut-app/complete$
 
 ```
 
 (3)Dockerコンテナを起動します。
 ```
 $ docker run -p 8080:8080 complete
-04:17:28.943 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 1441ms. Server Running: http://e1a0e02a8b2d:8080
+ __  __ _                                  _
+|  \/  (_) ___ _ __ ___  _ __   __ _ _   _| |_
+| |\/| | |/ __| '__/ _ \| '_ \ / _` | | | | __|
+| |  | | | (__| | | (_) | | | | (_| | |_| | |_
+|_|  |_|_|\___|_|  \___/|_| |_|\__,_|\__,_|\__|
+  Micronaut (v2.3.0)
 
+02:21:32.936 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 173ms. Server Running: http://d447523ef3ea:8080
 ```
+Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較します。  
+
 別ターミナルを立ち上げ、起動中のDockerサービスに対してリクエストを送ってみます。レスポンスのHello Worldが表示されることを確認します。
   >```sh
   >$ curl localhost:8080/hello  
@@ -276,13 +313,18 @@ $ docker run -p 8080:8080 complete
 Docker コンテナとDocker Imageを確認できます。
 ```
 $ docker ps -l
-CONTAINER ID   IMAGE      COMMAND                  CREATED         STATUS         PORTS                    NAMES
-e1a0e02a8b2d   complete   "java -jar /home/app…"   3 minutes ago   Up 3 minutes   0.0.0.0:8080->8080/tcp   unruffled_golick
+CONTAINER ID   IMAGE      COMMAND              CREATED         STATUS                            PORTS     NAMES
+d447523ef3ea   complete   "/app/application"   8 minutes ago   Exited (130) About a minute ago             hopeful_lehmann
 ```
 ```
 $ docker images
-REPOSITORY    TAG         IMAGE ID       CREATED          SIZE
-complete      latest      e5ca0570af3e   17 minutes ago   357MB
+REPOSITORY                      TAG            IMAGE ID       CREATED          SIZE
+complete                        latest         6ffb95f82e79   11 minutes ago   78.5MB
+<none>                          <none>         f5a92c52b9a2   11 minutes ago   1.39GB
+ghcr.io/graalvm/graalvm-ce      java8-21.0.0   b16c825a27d5   10 days ago      1.29GB
+frolvlad/alpine-glibc           alpine-3.12    d955957758ab   3 weeks ago      17.9MB
+hello-world                     latest         bf756fb1ae65   13 months ago    13.3kB
+gcr.io/distroless/cc-debian10   latest         fd0fdc7125b0   51 years ago     21.2MB
 ```
 
 # 演習 2: High-performance JIT コンパイラ
