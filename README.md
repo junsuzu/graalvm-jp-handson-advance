@@ -339,7 +339,7 @@ gcr.io/distroless/cc-debian10   latest         fd0fdc7125b0   51 years ago     2
 
 </br>
 
-# 2.1-SpringフレームワークでRESTfulのWebサービスを作成
+# 2.1 SpringフレームワークでRESTfulのWebサービスを作成
 
 この演習の中でHTTPリクエストに対しJSONオブジェクト（Hello World !）をリターンする簡単なSpringアプリケーションを作成します。通常Springアプリケーションの作成はSpring Initializrの利用をお勧めですが、この演習ではサンプルソースコードをダウンロードし、カスタマイズするアプローチで進めます。
 
@@ -440,7 +440,7 @@ linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$
 linuser@JUNSUZU-JP:~$ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
-# 2.2-Springアプリケーションからnative imageを生成
+# 2.2 Springアプリケーションからnative imageを生成
 GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
 
 (1)pom.xmlを編集します。  
@@ -574,7 +574,7 @@ INFO: Starting ProtocolHandler ["http-nio-8080"]
 $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World with Native Image!"}
 ```
-# 2.3-native imageをベースにDockerコンテナを生成
+# 2.3 native imageをベースにDockerコンテナを生成
 Spring BootがCloud Native Buildpackを提供し、MavenおよびGradleプラグインからdockerイメージを直接ビルドする機能をサポートします。
 この機能により、Dockerfileなしに、簡単なコマンドおよびプラグイン定義の編集だけで、容易にdockerイメージをビルド可能です。  
 
@@ -582,7 +582,7 @@ Spring BootがCloud Native Buildpackを提供し、MavenおよびGradleプラグ
 Buildpackを利用するため、buildタグの内容が以下になるように編集します。  
 Springから提供されるspring-boot-maven-pluginおよび使用するBuildpackのイメージ(paketobuildpacks/builder:tiny)を指定します。また、BP_BOOT_NATIVE_IMAGE 環境変数の値をtrueに指定します。
 ```
-<build>
+  <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
