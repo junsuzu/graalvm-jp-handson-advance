@@ -34,9 +34,10 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
    * [1.3: GraalVMとDockerでNative Imageを作成](#13-GraalVMとDockerでNative-Imageを作成)
    
 
-* **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-1-GraalVMとSpringBootによるマイクロサービス作成)**
-* **[演習 3: Native Imageの生成と実行](#演習-3-Native-Imageの生成と実行)**
-* **[演習 4: Polyglotプログラミングと実行](#演習-4-Polyglotプログラミングと実行)**
+* **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-2-GraalVMとSpringBootによるマイクロサービス作成)**
+   * [2.1: SpringフレームワークでRESTfulのWebサービスを作成](#21-SpringフレームワークでRESTfulのWebサービスを作成)
+   * [2.2: Springアプリケーションからnative imageを生成](#22-Springアプリケーションからnative-imageを生成)
+   * [2.3: native imageをベースにDockerコンテナを生成](#23-native-imageをベースにDockerコンテナを生成)
 <br/>
 <br/>
 
@@ -56,7 +57,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 </br>
 
-# 11-Micronautアプリケーションの作成と起動
+# 1.1-Micronautアプリケーションの作成と起動
 
 (1) Micronautアプリケーションの作成  
 
@@ -330,335 +331,274 @@ hello-world                     latest         bf756fb1ae65   13 months ago    1
 gcr.io/distroless/cc-debian10   latest         fd0fdc7125b0   51 years ago     21.2MB
 ```
 
-# 演習 2: High-performance JIT コンパイラ
-以下の演習は「Top 10 Things To Do With GraalVM」 の内容を使用します。  
-https://medium.com/graalvm/graalvm-ten-things-12d9111f307d
+# 演習 2: GraalVMとSpringBootによるマイクロサービス作成
+この演習では、以下の内容を実施します。  
+* Springフレームワークを利用し、RESTfulのWebサービスを作成
+* GraalVMでSpringBootアプリのnative imageの作成と稼働確認
+* native imageをベースにDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 
-(1)上記内容を使用するため、Githubよりソースをダウンロードします。任意の作業ディレクトリーで以下のコマンドを実行します。
+</br>
 
-  >```sh
-  >git clone https://github.com/chrisseaton/graalvm-ten-things/
-  >```
+# 2.1-SpringフレームワークでRESTfulのWebサービスを作成
 
-(2)上記コマンドの結果、"graalvm-ten-things"というディレクトリーが作成されます。そのディレクトリーに移動します。
+この演習の中でHTTPリクエストに対しJSONオブジェクト（Hello World !）をリターンする簡単なSpringアプリケーションを作成します。通常Springアプリケーションの作成はSpring Initializrの利用をお勧めですが、この演習ではサンプルソースコードをダウンロードし、カスタマイズするアプローチで進めます。
 
-  >```sh
-  >cd graalvm-ten-things
-  >```
+(1) Springサンプルソースのダウンロード  
 
-(3)以下のコマンドを実行し、サイズが約150MBに及ぶテキストファイル"large.txt"を作成します。この作業は少し時間がかかります。
+Githubよりソースをダウンロードします。ダウンロード後completeディレクトリー配下に移動します。以降のコマンド実行はすべてcomplete配下で行います。
 
   >```sh
-  >make large.txt
+  >git clone https://github.com/spring-guides/gs-rest-service
+  >cd gs-rest-service/complete
   >```
 
-(4)large.txtファイルが作成されたことをlsコマンドで確認します。サイズが150MBであることが確認できます。
-
-![Download Picture 9](images/GraalVMinstall09.JPG)
-
-(5)この演習で使用するサンプルプログラムTopTen.javaはlarge.txtの中から単語を集計し、上位トップテンの単語一覧を出力するJavaプログラムです。このプログラムはStream Java APIを使用し、すべての単語をソートし、カウントします。 
-
-以下はプログラムの内容です。
+(2)IntelliJ IDEAなどのIDEを使ってcompleteフォルダーを開き、中にあるJavaソースやpom.xmlを編集します。（もしくは直接エディターで編集）  
+* Plain Java Objectクラスを作成(確認)します。src/main/java/com/example/restservice/Greeting.java　　
 ```java
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+package com.example.restservice;
 
-public class TopTen {
+public class Greeting {
 
-    public static void main(String[] args) {
-        Arrays.stream(args)
-                .flatMap(TopTen::fileLines)
-                .flatMap(line -> Arrays.stream(line.split("\\b")))
-                .map(word -> word.replaceAll("[^a-zA-Z]", ""))
-                .filter(word -> word.length() > 0)
-                .map(word -> word.toLowerCase())
-                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet().stream()
-                .sorted((a, b) -> -a.getValue().compareTo(b.getValue()))
-                .limit(10)
-                .forEach(e -> System.out.format("%s = %d%n", e.getKey(), e.getValue()));
-    }
+	private final long id;
+	private final String content;
 
-    private static Stream<String> fileLines(String path) {
-        try {
-            return Files.lines(Paths.get(path));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+	public Greeting(long id, String content) {
+		this.id = id;
+		this.content = content;
+	}
 
+	public long getId() {
+		return id;
+	}
+
+	public String getContent() {
+		return content;
+	}
 }
 ```
+* HTTPリクエストをハンドリングするResource Controllerを作成（確認）します。（オプション：レスポンスの文字列を適宜に変更します。）src/main/java/com/example/restservice/GreetingController.java
+```java
+package com.example.restservice;
 
-(6)TopTen.javaをコンパイルします。デフォルトではクラスパスが通るGraalVMのJITコンパイラが有効になります。
+import java.util.concurrent.atomic.AtomicLong;
 
-  >```sh
-  >javac TopTen.java
-  >```
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-(7)GraalVMのJITコンパイラはJavaで書かれています。以下の最適化によりJITコンパイラの実行速度が従来C++で書かれていたコンパイラよりも速くなります。  
-* Partial Escape Analysis  
-* In-lining  
-* Path Duplication
+@RestController
+public class GreetingController {
 
-以下のJavaコマンドでコンパイルされたJavaクラスを実行し、実行タイムを測ります。引数にはlarge.txtを指定します。
+	private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();
 
-  >```sh
-  >time java TopTen large.txt
-  >```
-
-実行結果と実行時間を確認します。
-
+	@GetMapping("/greeting")
+	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+	}
+}
 ```
-sed = 502500
-ut = 392500
-in = 377500
-et = 352500
-id = 317500
-eu = 317500
-eget = 302500
-vel = 300000
-a = 287500
-sit = 282500
-
-real    0m32.699s
-user    0m34.078s
-sys     0m3.406s  
-```  
-(8)従来のJITコンパイラと比較するため、以下のJavaコマンドでフラッグを立てます：-XX:-UseJVMCICompile。JVMCIはGraalVMとJVMのあいだのインタフェースです。このフラッグによりJVMCIが使用されず、従来のJITコンパイラが使用されます。
-
-  >```sh
-  >time java -XX:-UseJVMCICompiler TopTen large.txt
-  >```
-
-実行結果と実行時間を確認します。
-
+(3)Mavenを使い実行可能なJARファイルにビルドし、実行します。
+ >```sh
+ >./mvnw clean package
+ >```
 ```
-sed = 502500
-ut = 392500
-in = 377500
-et = 352500
-id = 317500
-eu = 317500
-eget = 302500
-vel = 300000
-a = 287500
-sit = 282500
-
-real    0m48.901s
-user    0m49.219s
-sys     0m2.172s
-
-```  
-以上の結果から、GraalVMのJITコンパイラの実行時間は従来のコンパイラに比べて約30%短縮したことが分かります。  
-<br/>
-<br/>
-
-
-# 演習 3: Native Imageの生成と実行
-この演習の中に、GraalVMの中のAhead-of-Time(AOT)機能を利用して軽量で高速起動のNaitve Imageを作成します。  
-
-JITコンパイラはロングラン・アプリやピーク時高いスループットが要求されるアプリに強さを発揮できる一方、スタートアップ時間がかかることと、比較的に多くなメモリーを消費するデメリットがあります。以下の例は、ファイルサイズの小さい（１KB)ファイルに対してTopTenクラスを実行した場合、起動時間と消費メモリーを測定した結果です。　　
-
-(1)graalvm-ten-thingsディレクトリーに移動します。
-
-  >```sh
-  >cd graalvm-ten-things
-  >```
-
-(2)以下のコマンドを実行し、small.txtファイルを作成します。
-
-  >```sh
-  >make small.txt
-  >```
-(3)small.txtファイルが作成されたことをlsコマンドで確認します。サイズが1KBであることを確認してください。
-
-![Download Picture 10](images/GraalVMinstall10.JPG)
-
-(4)以下のコマンドを実行し、small.txtの単語を集計するプログラムTopTenを実行します。
-
-  >```sh
-  >/usr/bin/time -v java TopTen small.txt
-  >```
-出力結果を確認し、実行時間とメモリーを確認します。
-```
-sed = 6
-sit = 6
-amet = 6
-mauris = 3
-volutpat = 3
-vitae = 3
-dolor = 3
-libero = 3
-tempor = 2
-suscipit = 2
-        Command being timed: "java TopTen small.txt"
-        User time (seconds): 0.71
-        System time (seconds): 0.39
-        Percent of CPU this job got: 135%
-        Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.82
-        Average shared text size (kbytes): 0
-        Average unshared data size (kbytes): 0
-        Average stack size (kbytes): 0
-        Average total size (kbytes): 0
-        Maximum resident set size (kbytes): 53976
-        Average resident set size (kbytes): 0
-        Major (requiring I/O) page faults: 0
-        Minor (reclaiming a frame) page faults: 15495
-        Voluntary context switches: 0
-        Involuntary context switches: 0
-        Swaps: 0
-        File system inputs: 0
-        File system outputs: 0
-        Socket messages sent: 0
-        Socket messages received: 0
-        Signals delivered: 0
-        Page size (bytes): 4096
-        Exit status: 0
-```  
-
-(5)GraalVMが提供しているツールを使用して実行可能なNative Imageを作成します。実行ファイルの作成に少し時間がかかります。
-
-  >```sh
-  >native-image --no-server --no-fallback TopTen
-  >```
-出力結果を確認します。
-```
-linuser@JUNSUZU-JP:~/handson/graalvm-ten-things$ native-image --no-server --no-fallback TopTen
-[topten:166]    classlist:   5,361.17 ms,  1.13 GB
-[topten:166]        (cap):  15,043.95 ms,  1.58 GB
-[topten:166]        setup:  21,198.24 ms,  1.58 GB
-[topten:166]     (clinit):     376.17 ms,  1.76 GB
-[topten:166]   (typeflow):   9,617.27 ms,  1.76 GB
-[topten:166]    (objects):   7,946.82 ms,  1.76 GB
-[topten:166]   (features):     892.17 ms,  1.76 GB
-[topten:166]     analysis:  20,176.83 ms,  1.76 GB
-[topten:166]     universe:     752.08 ms,  1.76 GB
-[topten:166]      (parse):   1,989.35 ms,  1.76 GB
-[topten:166]     (inline):   2,549.77 ms,  1.76 GB
-[topten:166]    (compile):  32,064.48 ms,  2.89 GB
-[topten:166]      compile:  38,520.67 ms,  2.89 GB
-[topten:166]        image:   2,367.76 ms,  2.89 GB
-[topten:166]        write:   1,849.13 ms,  2.89 GB
-[topten:166]      [total]:  90,988.07 ms,  2.89 GB
-```  
-これにより、軽量な実行ファイル"topten"が作成されたことを確認します。
-
-![Download Picture 11](images/GraalVMinstall11.JPG)
-
-以下のコマンドでtoptenのサイズを確認できます。
-
-  >```sh
-  >du -h topten
-  >```
-
-(6)以下のコマンドで、実行ファイルtoptenを実行します。引数にsmall.txtを設定します。
-
-  >```sh
-  >/usr/bin/time -v ./topten small.txt
-  >```
-出力結果を確認し、実行時間とメモリーを確認します。
-```
-sed = 6
-sit = 6
-amet = 6
-mauris = 3
-volutpat = 3
-vitae = 3
-dolor = 3
-libero = 3
-tempor = 2
-suscipit = 2
-        Command being timed: "./topten small.txt"
-        User time (seconds): 0.01
-        System time (seconds): 0.23
-        Percent of CPU this job got: 70%
-        Elapsed (wall clock) time (h:mm:ss or m:ss): 0:00.35
-        Average shared text size (kbytes): 0
-        Average unshared data size (kbytes): 0
-        Average stack size (kbytes): 0
-        Average total size (kbytes): 0
-        Maximum resident set size (kbytes): 4968
-        Average resident set size (kbytes): 0
-        Major (requiring I/O) page faults: 0
-        Minor (reclaiming a frame) page faults: 1324
-        Voluntary context switches: 0
-        Involuntary context switches: 0
-        Swaps: 0
-        File system inputs: 0
-        File system outputs: 0
-        Socket messages sent: 0
-        Socket messages received: 0
-        Signals delivered: 0
-        Page size (bytes): 4096
-        Exit status: 0
-```  
-この結果は上記(4)と比較して、実行時間とメモリーはそれぞれ以下のようになります。
-|  |JIT実行  |AOT実行  |
-|---|---|---|
-|実行時間  |0.71秒  |0.01秒  |
-|メモリー  |53976kb  |4968kb  |
-  
-<br/>
-<br/>
-  
-
-# 演習 4: Polyglotプログラミングと実行
-GraalVM内部ではTruffleというフレームワークを使用してJava以外のプログラミング言語をGraalVMのJITコンパイラ上で動かすことができます。以下の演習では、一本のJavaScriptプログラム（polyglot.js)の中にGraalVMのpolyglot APIを使用し、JavaとRの両方を呼び出します。大きい整数の扱いがより効率的であるJavaのBigIntegerクラスを利用しながら、描画が得意とするRで3Dグラフを作成します。  
-
-(1)まずNode.jsで利用できるWebアプリケーションフレームワークExpressをインストールします。以下のコマンドを実行します。
-
-  >```sh
-  >$GRAALVM_HOME/bin/npm install express
-  >```
-
-
-(2)polyglot.jsの中身を確認します。このプログラムの中にJavaとRの両方を呼び出しています。
-```js
-const express = require('express')
-const app = express()
-
-const BigInteger = Java.type('java.math.BigInteger')
-
-app.get('/', function (req, res) {
-  var text = 'Hello World from Graal.js!<br> '
-
-  // Using Java standard library classes
-  text += BigInteger.valueOf(10).pow(100)
-          .add(BigInteger.valueOf(43)).toString() + '<br>'
-
-  // Using R interoperability to create graphs
-  text += Polyglot.eval('R',
-    `svg();
-     require(lattice);
-     x <- 1:100
-     y <- sin(x/10)
-     z <- cos(x^1.3/(runif(1)*5+10))
-     print(cloud(x~y*z, main="cloud plot"))
-     grDevices:::svg.off()
-    `);
-
-  res.send(text)
-})
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
-})
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO]
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ rest-service ---
+[INFO] Building jar: /home/linuser/work2/gs-rest-service/complete/target/rest-service-0.0.1-SNAPSHOT.jar
+[INFO]
+[INFO] --- spring-boot-maven-plugin:2.4.2:repackage (repackage) @ rest-service ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  42.415 s
+[INFO] Finished at: 2021-02-18T12:23:28+09:00
+[INFO] ------------------------------------------------------------------------
+linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$
 ```
 
-
-(3)polyglot.jsを実行します。
+正常ビルド完了後、JARファイルを実行します。Web Serviceの起動時間を確認します。
 >```sh
->$GRAALVM_HOME/bin/node --jvm --polyglot polyglot.js
->```
+ >java -jar target/rest-service-0.0.1-SNAPSHOT.jar
+ >```
 
-実行結果を確認するため、http://localhost:3000/ をブラウザでオープンして確認します。
-![Download Picture 12](images/GraalVMinstall12.JPG)
+```
+2021-02-18 12:26:24.325  INFO 1376 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-02-18 12:26:24.328  INFO 1376 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3107 ms
+2021-02-18 12:26:24.903  INFO 1376 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-02-18 12:26:25.555  INFO 1376 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-02-18 12:26:25.600  INFO 1376 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 5.848 seconds (JVM running for 7.438)
+```
+(4)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
+```sh
+linuser@JUNSUZU-JP:~$ curl http://localhost:8080/greeting
+{"id":1,"content":"Hello, World!"}
+```
+# 2.2-Springアプリケーションからnative imageを生成
+GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
+
+(1)pom.xmlを編集します。  
+
+profileタグの中にGraalVM提供のnative-image-maven-pluginおよびSpring提供のspring-boot-maven-plugin両方を指定します。以下の内容をpom.xmlに追加します。  
+(※-Dspring.native.remove-yaml-support=true と -Dspring.spel.ignore=true はフットプリントを削減するためのパラメータです。）
+
+ ```
+<profiles>
+  <profile>
+    <id>native</id>
+    <build>
+      <plugins>
+        <plugin>
+          <groupId>org.graalvm.nativeimage</groupId>
+          <artifactId>native-image-maven-plugin</artifactId>
+          <version>20.3.0</version>
+          <configuration>
+            <mainClass>com.example.restservice.RestServiceApplication</mainClass>
+            <buildArgs>-Dspring.native.remove-yaml-support=true -Dspring.spel.ignore=true</buildArgs>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>native-image</goal>
+              </goals>
+              <phase>package</phase>
+            </execution>
+          </executions>
+        </plugin>
+        <plugin>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-maven-plugin</artifactId>
+        </plugin>
+      </plugins>
+    </build>
+  </profile>
+</profiles>
+```
+さらに、dependencyタグにSpring提供のspring-graalvm-native を追加します。
+```
+<dependencies>
+    <!-- ...... -->
+    <dependency>
+        <groupId>org.springframework.experimental</groupId>
+        <artifactId>spring-graalvm-native</artifactId>
+        <version>0.8.5</version>
+    </dependency>
+</dependencies>
+```
+また、以下のリポジトリー定義を追加します。
+```
+<repositories>
+    <repository>
+        <id>spring-milestone</id>
+        <name>Spring milestone</name>
+        <url>https://repo.spring.io/milestone</url>
+    </repository>
+</repositories>
+```
+```
+<pluginRepositories>
+    <pluginRepository>
+        <id>spring-milestone</id>
+        <name>Spring milestone</name>
+        <url>https://repo.spring.io/milestone</url>
+    </pluginRepository>
+</pluginRepositories>
+```
+(2)以下のコマンドでSpringアプリケーションをnative imageへビルドします。  
+```
+mvn -Pnative clean package
+```
+※-Pnativeを指定することにより、profileタグ内の定義が有効になりなす。  
+native imageが正常にビルドされることを確認します。
+```
+Number of types dynamically registered for reflective access: #1452
+[com.example.restservice.restserviceapplication:1934]     (clinit):     930.18 ms,  3.56 GB
+[com.example.restservice.restserviceapplication:1934]   (typeflow):  21,747.29 ms,  3.56 GB
+[com.example.restservice.restserviceapplication:1934]    (objects):  24,425.65 ms,  3.56 GB
+[com.example.restservice.restserviceapplication:1934]   (features):   1,747.57 ms,  3.56 GB
+[com.example.restservice.restserviceapplication:1934]     analysis:  50,500.21 ms,  3.56 GB
+[com.example.restservice.restserviceapplication:1934]     universe:   2,914.62 ms,  3.56 GB
+[com.example.restservice.restserviceapplication:1934]      (parse):  26,267.71 ms,  4.76 GB
+[com.example.restservice.restserviceapplication:1934]     (inline):   6,773.49 ms,  5.20 GB
+[com.example.restservice.restserviceapplication:1934]    (compile): 127,892.37 ms,  6.67 GB
+[com.example.restservice.restserviceapplication:1934]      compile: 164,133.60 ms,  6.67 GB
+[com.example.restservice.restserviceapplication:1934]        image:   4,841.53 ms,  6.67 GB
+[com.example.restservice.restserviceapplication:1934]        write:   3,685.89 ms,  6.67 GB
+[com.example.restservice.restserviceapplication:1934]      [total]: 247,545.92 ms,  6.67 GB
+[INFO]
+[INFO] --- spring-boot-maven-plugin:2.4.2:repackage (repackage) @ rest-service ---
+[INFO] Replacing main artifact with repackaged archive
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:18 min
+[INFO] Finished at: 2021-02-18T14:41:39+09:00
+[INFO] ------------------------------------------------------------------------
+linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$
+```
+target配下にnative image "com.example.restservice.restserviceapplication"が生成されたことを確認します。
+
+(3)以下のコマンドでnative imageを実行します。
+```
+target/com.example.restservice.restserviceapplication
+```
+Springアプリケーションの起動時間を確認し、演習2.1の結果と比較します。
+```
+INFO: Initializing Spring embedded WebApplicationContext
+2021-02-18 14:47:38.331  INFO 2161 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 36 ms
+2021-02-18 14:47:38.342  INFO 2161 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+Feb 18, 2021 2:47:38 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-8080"]
+2021-02-18 14:47:38.507  INFO 2161 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-02-18 14:47:38.508  INFO 2161 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 0.234 seconds (JVM running for 0.236)
+```
+(4)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
+```sh
+linuser@JUNSUZU-JP:~$ curl http://localhost:8080/greeting
+{"id":1,"content":"Hello, World!"}
+```
+# 2.3-native imageをベースにDockerコンテナを生成
+Spring BootがCloud Native Buildpackを提供し、MavenおよびGradleプラグインからdockerイメージを直接ビルドする機能をサポートします。
+この機能により、Dockerfileなしに、簡単なコマンドおよびプラグイン定義の編集だけで、容易にdockerイメージをビルド可能です。  
+
+(1)演習2.2のpom.xmlをさらに編集を加えます。  
+Buildpackを利用するため、buildタグの内容が以下になるように編集します。  
+Springから提供されるspring-boot-maven-pluginおよび使用するBuildpackのイメージ(paketobuildpacks/builder:tiny)を指定します。また、BP_BOOT_NATIVE_IMAGE 環境変数の値をtrueに指定します。
+```
+<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<image>
+						<builder>paketobuildpacks/builder:tiny</builder>
+						<env>
+							<BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE>
+							<BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
+								-Dspring.native.remove-yaml-support=true
+								-Dspring.spel.ignore=true
+							</BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
+						</env>
+					</image>
+				</configuration>
+			</plugin>
+		</plugins>
+</build>
+```
+(2)native imageを含むdockerイメージをビルドします。  
+```
+mvn spring-boot:build-image
+```
+
+
+
 
 <br/>
 
