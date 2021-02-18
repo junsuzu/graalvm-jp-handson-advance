@@ -579,29 +579,25 @@ Spring BootがCloud Native Buildpackを提供し、MavenおよびGradleプラグ
 この機能により、Dockerfileなしに、簡単なコマンドおよびプラグイン定義の編集だけで、容易にdockerイメージをビルド可能です。  
 
 (1)演習2.2のpom.xmlをさらに編集を加えます。  
-Buildpackを利用するため、buildタグの内容が以下になるように編集します。  
+Buildpackを利用するため、buildタグ内のpluginの内容が以下になるように編集します。  
 Springから提供されるspring-boot-maven-pluginおよび使用するBuildpackのイメージ(paketobuildpacks/builder:tiny)を指定します。また、BP_BOOT_NATIVE_IMAGE 環境変数の値をtrueに指定します。
 ```
-  <build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<image>
-						<builder>paketobuildpacks/builder:tiny</builder>
-						<env>
-							<BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE>
-							<BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
-								-Dspring.native.remove-yaml-support=true
-								-Dspring.spel.ignore=true
-							</BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
-						</env>
-					</image>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+<plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <configuration>
+        <image>
+            <builder>paketobuildpacks/builder:tiny</builder>
+            <env>
+                <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE>
+                <BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
+                    -Dspring.native.remove-yaml-support=true
+                    -Dspring.spel.ignore=true
+                </BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
+            </env>
+        </image>
+    </configuration>
+</plugin>
 ```
 (2)native imageを含むdockerイメージをビルドします。  
 ```
