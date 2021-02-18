@@ -599,19 +599,56 @@ Springから提供されるspring-boot-maven-pluginおよび使用するBuildpac
     </configuration>
 </plugin>
 ```
-(2)native imageを含むdockerイメージをビルドします。  
+(2)GreetingController.javaを適宜編集し、レスポンスでリターンされる文字列を変更します。例：  
+```
+defaultValue = "World with Native Image in Docker"
+```
+(3)native imageを含むdocker コンテナイメージをビルドします。  
+下記コマンド実行より、Springアプリケーションからnative imageを生成し、それをベースにdocker コンテナイメージをビルドします。  
+(※ビルド時Dockerデーモンを起動している必要があります。この演習ではWindows版Desktop Dockerを起動します。)
 ```
 mvn spring-boot:build-image
 ```
-
-
-
-
+ビルドが正常終了したことを確認し、docker imagesコマンドで生成されたイメージを確認します。
+```
+[INFO]
+[INFO] Successfully built image 'docker.io/library/rest-service:0.0.1-SNAPSHOT'
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  04:16 min
+[INFO] Finished at: 2021-02-18T22:37:35+09:00
+[INFO] ------------------------------------------------------------------------
+linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$ docker images
+REPOSITORY                 TAG              IMAGE ID       CREATED        SIZE
+paketobuildpacks/run       tiny-cnb         3a4a95267ff3   9 days ago     17.3MB
+paketobuildpacks/builder   tiny             eb48c8dc80d9   41 years ago   406MB
+rest-service               0.0.1-SNAPSHOT   d34a0675c473   41 years ago   79.3MB
+```
+(4)上記生成されたdocker コンテナイメージを実行します。 
+```
+docker run -p 8080:8080 docker.io/library/rest-service:0.0.1-SNAPSHOT
+```
+コンテナの起動結果および起動時間を確認し、演習2.1,2.2の結果と比較します。
+```
+INFO: Initializing Spring embedded WebApplicationContext
+2021-02-18 14:13:59.964  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 29 ms
+2021-02-18 14:13:59.976  INFO 1 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+Feb 18, 2021 2:13:59 PM org.apache.coyote.AbstractProtocol start
+INFO: Starting ProtocolHandler ["http-nio-8080"]
+2021-02-18 14:13:59.985  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-02-18 14:13:59.986  INFO 1 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 0.061 seconds (JVM running for 0.063)
+```
+(5)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
+```sh
+$ curl http://localhost:8080/greeting
+{"id":1,"content":"Hello, World with Native Image in Docker!"}
+```
 <br/>
+お疲れ様でした！  
 
-お疲れ様でした！
-<br/>
-ここまでは、Oracle GraalVM Enterprise ハンズオン演習 (Basic編)の内容はすべて終了しました。この演習では以下の項目について学びました。
+ここまでは、Oracle GraalVM Enterprise ハンズオン演習 (Advance編)の内容はすべて終了しました。この演習では以下の項目について学びました。
  
 * GraalVMの導入
 * GraalVM JITコンパイラでJavaクラスを実行
