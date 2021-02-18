@@ -510,7 +510,18 @@ profileタグの中にGraalVM提供のnative-image-maven-pluginおよびSpring�
     </pluginRepository>
 </pluginRepositories>
 ```
-(2)以下のコマンドでSpringアプリケーションをnative imageへビルドします。  
+propertiesタグにテストをスキップするよう定義します。
+```
+	<properties>
+		<java.version>1.8</java.version>
+		<skipTests>true</skipTests>
+	</properties>
+```
+(2)GreetingController.javaを適宜編集し、レスポンスでリターンされる文字列を変更します。例：  
+```
+defaultValue = "World with Native Image"
+```
+(3)以下のコマンドでSpringアプリケーションをnative imageへビルドします。  
 ```
 mvn -Pnative clean package
 ```
@@ -544,7 +555,7 @@ linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$
 ```
 target配下にnative image "com.example.restservice.restserviceapplication"が生成されたことを確認します。
 
-(3)以下のコマンドでnative imageを実行します。
+(4)以下のコマンドでnative imageを実行します。
 ```
 target/com.example.restservice.restserviceapplication
 ```
@@ -558,10 +569,10 @@ INFO: Starting ProtocolHandler ["http-nio-8080"]
 2021-02-18 14:47:38.507  INFO 2161 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
 2021-02-18 14:47:38.508  INFO 2161 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 0.234 seconds (JVM running for 0.236)
 ```
-(4)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
+(5)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
 ```sh
-linuser@JUNSUZU-JP:~$ curl http://localhost:8080/greeting
-{"id":1,"content":"Hello, World!"}
+$ curl http://localhost:8080/greeting
+{"id":1,"content":"Hello, World with Native Image!"}
 ```
 # 2.3-native imageをベースにDockerコンテナを生成
 Spring BootがCloud Native Buildpackを提供し、MavenおよびGradleプラグインからdockerイメージを直接ビルドする機能をサポートします。
@@ -590,7 +601,7 @@ Springから提供されるspring-boot-maven-pluginおよび使用するBuildpac
 				</configuration>
 			</plugin>
 		</plugins>
-</build>
+	</build>
 ```
 (2)native imageを含むdockerイメージをビルドします。  
 ```
