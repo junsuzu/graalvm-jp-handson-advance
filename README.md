@@ -18,7 +18,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * OS: Windows10 + WSL(Windows Subsystem for Linux) + Ubuntu20.04  
 * Docker Engine on Ubuntu 20.10.2([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)) 
 * Docker Desktop for Windows 20.10.2([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
-* Micronaut ([SDKmanによるインストール](https://micronaut.io/download.html))
+* Micronaut Linux版 ([SDKmanによるインストール](https://micronaut.io/download.html))
 * GraalVM EE 20.3.0 Java8 Linux版 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習ではCoreパッケージおよびNative Imageコンポーネントのみ必要)
 * IntelliJ IDEA Community 2020.3 Windows版(オプション)
 * [Docker環境設定](#付録-Docker環境設定)
