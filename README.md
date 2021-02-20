@@ -20,8 +20,9 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * Docker Engine on Ubuntu 20.10.2([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)) 
 * Docker Desktop for Windows 20.10.2([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
 * Micronaut ([SDKmanによるインストール](https://micronaut.io/download.html))
-* GraalVM EE 20.3.0 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/))
+* GraalVM EE 20.3.0 Java8 Linux版 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習ではCoreパッケージおよびNative Imageコンポーネントのみ必要)
 * IntelliJ IDEA Community 2020.3 Windows版(オプション)
+* [Docker環境設定](#付録-Docker環境設定)
 
 ※ハンズオンの参加者は事前セットアップ済みの環境でハンズオン演習を実施して頂きます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
 <br/>
@@ -655,4 +656,22 @@ $ curl http://localhost:8080/greeting
 * GraalVM JITコンパイラでJavaクラスを実行
 * GraalVM AOTコンパイラでNative Imageの生成と実行
 * Polyglot 多言語プログラミングと実行 
+
+</br>
+
+## <付録> Docker環境設定
+* Docker Desktop for WindowsのSettings画面で、"Expose daemon on tcp://localhost:2375 without TLS"項目にチェックを入れてください。
+* WSLからDocker Desktop for Windowsへの接続設定：  
+
+```sh
+vi ~/.bashrc
+```
+以下の行を追加します：  
+```sh
+export DOCKER_HOST=tcp://localhost:2375
+```
+ファイルを修正後、以下のコマンドで実行します。
+```sh
+source ~/.bashrc
+```
 
