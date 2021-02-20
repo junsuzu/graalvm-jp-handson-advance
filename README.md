@@ -126,11 +126,25 @@ Note: Creating bean classes for 1 type elements
 BUILD SUCCESSFUL in 26s
 14 actionable tasks: 14 executed
 ```
+```
+(5)Micronautアプリケーションを起動します。
+  >```sh
+  >$ java -jar build/libs/complete-0.1-all.jar
+  >```
 Microanutアプリケーションの起動時間をメモっておきます。
 
-別ターミナルを立ち上げ、アプリケーションにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
-
 ```
+ __  __ _                                  _
+|  \/  (_) ___ _ __ ___  _ __   __ _ _   _| |_
+| |\/| | |/ __| '__/ _ \| '_ \ / _` | | | | __|
+| |  | | | (__| | | (_) | | | | (_| | |_| | |_
+|_|  |_|_|\___|_|  \___/|_| |_|\__,_|\__,_|\__|
+  Micronaut (v2.3.0)
+
+19:14:56.723 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 5815ms. Server Running: http://localhost:8080
+```
+(6)別ターミナルを立ち上げ、アプリケーションにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
+
 $ curl http://localhost:8080/hello
 Hello World
 ```
