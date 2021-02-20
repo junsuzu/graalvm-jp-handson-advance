@@ -126,7 +126,7 @@ Note: Creating bean classes for 1 type elements
 BUILD SUCCESSFUL in 26s
 14 actionable tasks: 14 executed
 ```
-```
+
 (5)Micronautアプリケーションを起動します。
   >```sh
   >$ java -jar build/libs/complete-0.1-all.jar
@@ -145,7 +145,11 @@ Microanutアプリケーションの起動時間をメモっておきます。
 ```
 (6)別ターミナルを立ち上げ、アプリケーションにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
 
-$ curl http://localhost:8080/hello
+>```sh
+> $ curl http://localhost:8080/hello
+>```
+
+```
 Hello World
 ```
 アプリケーションをCtrl+Cで停止します。  
