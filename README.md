@@ -65,8 +65,8 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 上記コマンドより、completeフォルダが作成されていることをご確認ください。
 <br/>
 
-(2)IntelliJ IDEAから上記(1)で作成したアプリケーションをカスタマイズし、Micronautコントローラーを追加します。  
-IntelliJ IDEAからcompleteフォルダーを開き、src>main>java>example.microanutパッケージの配下に新規JAVAソースファイルHelloController.javaを作成します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。
+(2)エディターもしくはIDE環境を使用し、上記(1)で作成したアプリケーションをカスタマイズし、Micronautコントローラーを追加します。  
+src>main>java>example.microanutパッケージの配下に新規JavaソースファイルHelloController.javaを作成します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。下記はIntelliJ IDEAからcompleteフォルダーを開き、Javaファイルを新規追加するイメージです。
 
 ![Download Picture 5](images/GraalVMadvance05.JPG)
 
@@ -108,17 +108,24 @@ public class HelloController {
 * ③ デフォルトではMicronautアプリのリスポンスのContentTypeはapplicaiton/jasonです。ここではJSONオブジェクトの代わりにStringをリターンしますので、text/plain を明示的に指定します。
 * ④　"Hello World"　をリターンします。
 
-(4)IntelliJ IDEA上Javaソースを保存したら、UbuntuターミナルからMicronautアプリケーションをbuildした後、起動します。以降のコマンドはすべてcomplete配下で実行してください。
+(4)IntelliJ IDEA上Javaソースを保存したら、LinuxターミナルからMicronautアプリケーションをbuildします。  
+※以降のコマンドはすべてcomplete配下で実行してください。
 
   >```sh
-  >$ ./gradlew run -t
+  >$ ./gradlew build
   >```
 出力結果をご確認ください。
 
-  >```
-  >linuser@JUNSUZU-JP:~/work/complete$ java -jar ./build/libs/complete-0.1-all.jar
->15:55:55.420 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 5915ms. Server Running: http://localhost:8080
-  >```
+```
+Starting a Gradle Daemon (subsequent builds will be faster)
+> Task :compileJava
+Note: Creating bean classes for 1 type elements
+> Task :compileTestJava
+Note: Creating bean classes for 1 type elements
+
+BUILD SUCCESSFUL in 26s
+14 actionable tasks: 14 executed
+```
 Microanutアプリケーションの起動時間をメモっておきます。
 
 別ターミナルを立ち上げ、アプリケーションにアクセスしてみましょう。"Hello World"がレスポンスとして表示されることを確認します。
