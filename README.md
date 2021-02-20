@@ -17,12 +17,13 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 ## ＜前提環境／事前準備＞
 * OS: Windows10 + WSL(Windows Subsystem for Linux) + Ubuntu20.04  
-* Ubuntu以外のLinuxおよびMacOS、Windowsもサポートされます。
 * Docker Engine on Ubuntu 20.10.2([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)) 
 * Docker Desktop for Windows 20.10.2([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
-* IntelliJ IDEA Community 2020.3
+* Micronaut ([SDKmanによるインストール](https://micronaut.io/download.html))
+* GraalVM EE 20.3.0 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/))
+* IntelliJ IDEA Community 2020.3 Windows版(オプション)
 
-※「Oracle GraalVM Enterprise Virtual Hands-On Lab」の参加者は基本的に事前セットアップ済みの環境でハンズオン演習を実施して頂きます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
+※ハンズオンの参加者は事前セットアップ済みの環境でハンズオン演習を実施して頂きます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
 <br/>
 
 
