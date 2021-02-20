@@ -655,6 +655,7 @@ $ curl http://localhost:8080/greeting
 * Docker Desktop for WindowsのSettings画面で、"Expose daemon on tcp://localhost:2375 without TLS"項目にチェックを入れてください。
 * WSLからDocker Desktop for Windowsへの接続設定：  
 
+~/.bashrcを修正します。
 ```sh
 vi ~/.bashrc
 ```
