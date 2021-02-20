@@ -4,14 +4,13 @@
 このハンズオン演習は、下記Oracle GraalVM Enterpriseハンズオン演習のアドバンス編になります。  
 [Oracle GraalVM Enterprise ハンズオン演習 (Basic編)](https://github.com/junsuzu/graalvm-jp-handson-basic/)
 
-Basic編では、次世代Polyglot(多言語プログラミング）対応実行環境であるOracle GraalVM Enterprise版の導入と操作手順を学びましたが、この演習ではGraalVMをCloud Native環境で応用するためのより高度な内容となります。演習を通して以下の項目をマスターすることを目的としています。  
-* GraalVMのNative Image機能でMicroservicesを作る
-* GraalVMのPGOチューニング
-* GraalVM  
+Basic編では、次世代Polyglot(多言語プログラミング）対応実行環境であるOracle GraalVM Enterprise版の導入と操作手順を学びましたが、この演習ではGraalVMとフレームワークによるマイクロサービスの作成を実施します。演習を通して以下の項目を体験することを目的としています。  
+* GraalVMとMicronautによるアプリケーション開発
+* GraalVMとSpringBootによるアプリケーション開発  
 
 このハンズオン演習の対象は上記Basic編を習得済みであることは望ましいが、必須ではありません。  
 
-※この内容はOracle主催のOracle GraalVM Enterprise Virtual Hands-On Lab(Advance)の演習部分にあたります。  
+※この内容はOracle Java GBU主催のOracle GraalVM Enterprise 最新動向&ハンズオン・ワークショップの演習部分にあたります。  
 参加者はこちらの内容に沿って事前環境セットアップおよび当日演習を実施して頂けます。また単独でGraalVMのアドバンス編演習としてもご利用頂けます。  
 <br/>
 
@@ -50,13 +49,6 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * Micronautアプリケーションの導入と稼働確認
 * GraalVMでMicronautアプリのnative imageの作成と稼働確認
 * native imageをベースにDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
-
-この演習を実施するためには、以下のソフトを導入します。  
-* Micronaut ([SDKmanによるインストール](https://micronaut.io/download.html))
-* GraalVM EE 20.1.0 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/))
-* Docker CE([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
-* Docker DeskTop([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/))
-
 </br>
 
 # 1.1-Micronautアプリケーションの作成と起動
