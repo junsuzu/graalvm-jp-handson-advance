@@ -147,11 +147,8 @@ Microanutアプリケーションの起動時間をメモっておきます。
 
 >```sh
 > $ curl http://localhost:8080/hello
+> Hello World
 >```
-
-```
-Hello World
-```
 アプリケーションをCtrl+Cで停止します。  
 <br/>
 
