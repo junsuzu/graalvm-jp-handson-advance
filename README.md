@@ -441,7 +441,7 @@ public class GreetingController {
 ```
 (4)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
 ```sh
-linuser@JUNSUZU-JP:~$ curl http://localhost:8080/greeting
+$ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
 # 2.2 Springアプリケーションからnative imageを生成
@@ -526,8 +526,8 @@ propertiesタグにテストをスキップするよう定義します。
 defaultValue = "World with Native Image"
 ```
 (3)以下のコマンドでSpringアプリケーションをnative imageへビルドします。  
-```
-mvn -Pnative clean package
+```sh
+$ ./mvnw -Pnative clean package
 ```
 ※-Pnativeを指定することにより、profileタグ内の定義が有効になりなす。  
 native imageが正常にビルドされることを確認します。
@@ -555,7 +555,6 @@ Number of types dynamically registered for reflective access: #1452
 [INFO] Total time:  04:18 min
 [INFO] Finished at: 2021-02-18T14:41:39+09:00
 [INFO] ------------------------------------------------------------------------
-linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$
 ```
 target配下にnative image "com.example.restservice.restserviceapplication"が生成されたことを確認します。
 
