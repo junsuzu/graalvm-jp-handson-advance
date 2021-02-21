@@ -37,8 +37,8 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 * **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-2-GraalVMとSpringBootによるマイクロサービス作成)**
    * [2.1: SpringフレームワークでRESTfulのWebサービスを作成](#21-SpringフレームワークでRESTfulのWebサービスを作成)
-   * [2.2: Springアプリケーションからnative imageを生成](#22-Springアプリケーションからnative-imageを生成)
-   * [2.3: native imageを含むDockerコンテナを生成](#23-native-imageを含むDockerコンテナを生成)
+   * [2.2: SpringアプリケーションからNative Imageを生成](#22-Springアプリケーションからnative-imageを生成)
+   * [2.3: Native Imageを含むDockerコンテナを生成](#23-native-imageを含むDockerコンテナを生成)
 <br/>
 <br/>
 
@@ -48,7 +48,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 この演習では、以下の内容を実施します。  
 * Micronautアプリケーションの導入と稼働確認
 * GraalVMでMicronautアプリのnative imageの作成と稼働確認
-* native imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+* Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 </br>
 
 # 1.1-Micronautアプリケーションの作成と起動
@@ -221,7 +221,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
   >  }
   >```
 
-(3)Dockerにnative imageをビルドします。。complete配下で以下のコマンドを実行します。
+(3)Native Imageを含むDockerイメージをビルドします。complete配下で以下のコマンドを実行します。
 
   >```sh
   >$ ./gradlew dockerBuildNative
@@ -339,8 +339,8 @@ gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16
 # 演習 2: GraalVMとSpringBootによるマイクロサービス作成
 この演習では、以下の内容を実施します。  
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
-* GraalVMでSpringBootアプリのnative imageの作成と稼働確認
-* native imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+* GraalVMでSpring Bootアプリのnative imageの作成と稼働確認
+* Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 
 </br>
 
@@ -444,7 +444,7 @@ public class GreetingController {
 $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
-# 2.2 Springアプリケーションからnative imageを生成
+# 2.2 SpringアプリケーションからNative Imageを生成
 GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
 
 (1)pom.xmlを編集します。  
@@ -530,7 +530,8 @@ defaultValue = "World with Native Image"
 $ ./mvnw -Pnative clean package
 ```
 ※-Pnativeを指定することにより、profileタグ内の定義が有効になりなす。  
-native imageが正常にビルドされることを確認します。
+Native Imageが正常にビルドされることを確認します。
+
 ```
 Number of types dynamically registered for reflective access: #1452
 [com.example.restservice.restserviceapplication:1934]     (clinit):     930.18 ms,  3.56 GB
@@ -577,7 +578,7 @@ INFO: Starting ProtocolHandler ["http-nio-8080"]
 $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World with Native Image!"}
 ```
-# 2.3 native imageを含むDockerコンテナを生成
+# 2.3 Native Imageを含むDockerコンテナを生成
 Spring Bootが[Cloud Native Buildpacks](https://buildpacks.io/)へのサポートを提供し、Dockerfileを書かずにMavenおよびGradleプラグインからDockerイメージをビルドする機能をサポートします。
 
 (1)演習2.2で編集したpom.xmlに対しさらに編集を加えます。  
@@ -605,7 +606,7 @@ Spring Bootから提供されるspring-boot-maven-pluginおよび使用するBui
 ```
 defaultValue = "World with Native Image in Docker"
 ```
-(3)native imageを含むDockerコンテナイメージをビルドします。  
+(3)Native Imageを含むDockerコンテナイメージをビルドします。  
 下記コマンド実行より、Spring Bootアプリケーションからnative imageを生成し、それを含むDockerコンテナイメージをビルドします。  
 (※ビルド時Dockerデーモンを起動している必要があります。この演習ではWindows版Desktop Dockerを起動します。)
 ```
