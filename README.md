@@ -654,7 +654,7 @@ $ curl http://localhost:8080/greeting
 ここまでは、Oracle GraalVM Enterprise ハンズオン演習 (Advance編)の内容はすべて終了しました。この演習では以下の項目について学びました。
  
 * GraalVMとMicronautによるマイクロサービスの作成と実行
-* GraalVMとSpringによるマイクロサービスの作成と実行
+* GraalVMとSpring Bootによるマイクロサービスの作成と実行
 
 </br>
 
