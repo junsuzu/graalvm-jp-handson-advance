@@ -16,10 +16,10 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 ## ＜前提環境／事前準備＞
 * OS: Windows10 + WSL(Windows Subsystem for Linux) + Ubuntu20.04  
+* GraalVM EE 20.3.0 Java8 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
 * Docker Engine on Ubuntu 20.10.2([Install Docker Engine on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)) 
 * Docker Desktop for Windows 20.10.2([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
 * Micronaut Linux版 ([SDKmanによるインストール](https://micronaut.io/download.html))
-* GraalVM EE 20.3.0 Java8 Linux版 ([ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習ではCoreパッケージおよびNative Imageコンポーネントのみ必要)
 * IntelliJ IDEA Community 2020.3 Windows版(オプション)
 * [Docker環境設定](#付録-Docker環境設定)
 
@@ -32,7 +32,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * **[演習 1: GraalVMとMicronautによるマイクロサービス作成](#演習-1-GraalVMとMicronautによるマイクロサービス作成)**
    * [1.1: Micronautアプリケーションの作成と起動](#11-Micronautアプリケーションの作成と起動)
    * [1.2: GraalVMを使用してNative Imageを作成](#12-GraalVMを使用してNative-Imageを作成)
-   * [1.3: GraalVMとDockerでNative Imageを作成](#13-GraalVMとDockerでNative-Imageを作成)
+   * [1.3: Dockerを使用してNative Imageを作成](#13-Dockerを使用してNative-Imageを作成)
    
 
 * **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-2-GraalVMとSpringBootによるマイクロサービス作成)**
@@ -105,7 +105,7 @@ public class HelloController {
 ```
 * ① @Controller アノテーションがコントローラーを定義し、/helloというリクエスト・パスに対応します。  
 * ② @Get アノテーションは下記index メソッドをすべてのHTTP Getリクエストに対応するようにマッピングします。
-* ③ デフォルトではMicronautアプリのリスポンスのContentTypeはapplicaiton/jasonです。ここではJSONオブジェクトの代わりにStringをリターンしますので、text/plain を明示的に指定します。
+* ③ デフォルトではMicronautアプリのレスポンスのContentTypeはapplicaiton/jasonです。ここではJSONオブジェクトの代わりにStringをリターンしますので、text/plain を明示的に指定します。
 * ④　"Hello World"　をリターンします。
 
 (4)IntelliJ IDEA上Javaソースを保存したら、LinuxターミナルからMicronautアプリケーションをbuildします。  
@@ -203,7 +203,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 アプリケーションをCtrl+Cで停止します。  
 <br/>
 
-# 1.3: GraalVMとDockerでNative Imageを作成
+# 1.3: Dockerを使用してNative Imageを作成
 
 (1)Dockerデーモンを起動します。本演習の環境ではWindowsのDocker DesktopをDockerデーモンとして2375番ポートでオープンし、Ubuntu側のDockerクライアントはそのデーモンに接続します。下記はDocker Desktopのsetting画面です。
 
@@ -221,7 +221,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
   >  }
   >```
 
-(3)Docker内でnative imageを作成します。complete配下で以下のコマンドを実行します。
+(3)Dockerにnative imageをビルドします。。complete配下で以下のコマンドを実行します。
 
   >```sh
   >$ ./gradlew dockerBuildNative
@@ -660,6 +660,7 @@ $ curl http://localhost:8080/greeting
 
 ## <付録> Docker環境設定
 * Docker Desktop for WindowsのSettings画面で、"Expose daemon on tcp://localhost:2375 without TLS"項目にチェックを入れてください。
+* Docker Desktop for Windowsのsettings画面で、メモリを4GB～8GBにアサインしてください。
 * WSLからDocker Desktop for Windowsへの接続設定：  
 
 ~/.bashrcを修正します。
