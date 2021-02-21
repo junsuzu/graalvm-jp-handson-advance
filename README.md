@@ -294,7 +294,6 @@ Created image with ID '4b371959869b'.
 
 BUILD SUCCESSFUL in 5m 59s
 6 actionable tasks: 2 executed, 4 up-to-date
-linuser@JUNSUZU-JP:~/work1/complete$
 
 ```
 
@@ -425,7 +424,6 @@ public class GreetingController {
 [INFO] Total time:  42.415 s
 [INFO] Finished at: 2021-02-18T12:23:28+09:00
 [INFO] ------------------------------------------------------------------------
-linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$
 ```
 
 正常ビルド完了後、JARファイルを実行します。Web Serviceの起動時間を確認します。
