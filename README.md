@@ -521,7 +521,7 @@ propertiesタグにテストをスキップするよう定義します。
 		<skipTests>true</skipTests>
 	</properties>
 ```
-(2)GreetingController.javaを適宜編集し、レスポンスでリターンされる文字列を変更します。例：  
+(2)GreetingController.javaを編集し、レスポンスでリターンされる文字列を変更します。例：  
 ```
 defaultValue = "World with Native Image"
 ```
@@ -602,7 +602,7 @@ Spring Bootから提供されるspring-boot-maven-pluginおよび使用するBui
     </configuration>
 </plugin>
 ```
-(2)GreetingController.javaを適宜編集し、レスポンスでリターンされる文字列を変更します。例：  
+(2)GreetingController.javaを編集し、レスポンスでリターンされる文字列を変更します。例：  
 ```
 defaultValue = "World with Native Image in Docker"
 ```
