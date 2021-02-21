@@ -38,7 +38,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-2-GraalVMとSpringBootによるマイクロサービス作成)**
    * [2.1: SpringフレームワークでRESTfulのWebサービスを作成](#21-SpringフレームワークでRESTfulのWebサービスを作成)
    * [2.2: Springアプリケーションからnative imageを生成](#22-Springアプリケーションからnative-imageを生成)
-   * [2.3: native imageをベースにDockerコンテナを生成](#23-native-imageをベースにDockerコンテナを生成)
+   * [2.3: native imageを含むDockerコンテナを生成](#23-native-imageを含むDockerコンテナを生成)
 <br/>
 <br/>
 
@@ -48,7 +48,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 この演習では、以下の内容を実施します。  
 * Micronautアプリケーションの導入と稼働確認
 * GraalVMでMicronautアプリのnative imageの作成と稼働確認
-* native imageをベースにDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+* native imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 </br>
 
 # 1.1-Micronautアプリケーションの作成と起動
@@ -340,7 +340,7 @@ gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16
 この演習では、以下の内容を実施します。  
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
 * GraalVMでSpringBootアプリのnative imageの作成と稼働確認
-* native imageをベースにDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+* native imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 
 </br>
 
@@ -577,13 +577,12 @@ INFO: Starting ProtocolHandler ["http-nio-8080"]
 $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World with Native Image!"}
 ```
-# 2.3 native imageをベースにDockerコンテナを生成
-Spring BootがCloud Native Buildpackを提供し、MavenおよびGradleプラグインからdockerイメージを直接ビルドする機能をサポートします。
-この機能により、Dockerfileなしに、簡単なコマンドおよびプラグイン定義の編集だけで、容易にdockerイメージをビルド可能です。  
+# 2.3 native imageを含むDockerコンテナを生成
+Spring Bootが[Cloud Native Buildpacks](https://buildpacks.io/)へのサポートを提供し、Dockerfileを書かずにMavenおよびGradleプラグインからDockerイメージをビルドする機能をサポートします。
 
-(1)演習2.2のpom.xmlをさらに編集を加えます。  
+(1)演習2.2で編集したpom.xmlに対しさらに編集を加えます。  
 Buildpackを利用するため、buildタグ内のpluginの内容が以下になるように編集します。  
-Springから提供されるspring-boot-maven-pluginおよび使用するBuildpackのイメージ(paketobuildpacks/builder:tiny)を指定します。また、BP_BOOT_NATIVE_IMAGE 環境変数の値をtrueに指定します。
+Spring Bootから提供されるspring-boot-maven-pluginおよび使用するBuildpackのイメージ(paketobuildpacks/builder:tiny)を指定します。また、BP_BOOT_NATIVE_IMAGE 環境変数の値をtrueに指定します。
 ```
 <plugin>
     <groupId>org.springframework.boot</groupId>
@@ -606,8 +605,8 @@ Springから提供されるspring-boot-maven-pluginおよび使用するBuildpac
 ```
 defaultValue = "World with Native Image in Docker"
 ```
-(3)native imageを含むdocker コンテナイメージをビルドします。  
-下記コマンド実行より、Springアプリケーションからnative imageを生成し、それをベースにdocker コンテナイメージをビルドします。  
+(3)native imageを含むDockerコンテナイメージをビルドします。  
+下記コマンド実行より、Spring Bootアプリケーションからnative imageを生成し、それを含むDockerコンテナイメージをビルドします。  
 (※ビルド時Dockerデーモンを起動している必要があります。この演習ではWindows版Desktop Dockerを起動します。)
 ```
 $ ./mvn spring-boot:build-image
@@ -629,7 +628,7 @@ paketobuildpacks/run       tiny-cnb         3a4a95267ff3   9 days ago     17.3MB
 paketobuildpacks/builder   tiny             eb48c8dc80d9   41 years ago   406MB
 rest-service               0.0.1-SNAPSHOT   d34a0675c473   41 years ago   79.3MB
 ```
-(4)上記生成されたdocker コンテナイメージを実行します。 
+(4)上記生成されたDocker コンテナイメージを実行します。 
 ```
 docker run -p 8080:8080 docker.io/library/rest-service:0.0.1-SNAPSHOT
 ```
@@ -653,14 +652,14 @@ $ curl http://localhost:8080/greeting
 
 ここまでは、Oracle GraalVM Enterprise ハンズオン演習 (Advance編)の内容はすべて終了しました。この演習では以下の項目について学びました。
  
-* GraalVMとMicronautによるマイクロサービス作成と実行
-* GraalVMとSpringによるマイクロサービス作成と実行
+* GraalVMとMicronautによるマイクロサービスの作成と実行
+* GraalVMとSpringによるマイクロサービスの作成と実行
 
 </br>
 
 ## <付録> Docker環境設定
 * Docker Desktop for WindowsのSettings画面で、"Expose daemon on tcp://localhost:2375 without TLS"項目にチェックを入れてください。
-* Docker Desktop for Windowsのsettings画面で、メモリを4GB～8GBにアサインしてください。
+* Docker Desktop for WindowsのSettings画面で、メモリを4GB～8GBにアサインしてください。
 * WSLからDocker Desktop for Windowsへの接続設定：  
 
 ~/.bashrcを修正します。
