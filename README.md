@@ -381,7 +381,7 @@ public class Greeting {
 	}
 }
 ```
-* HTTPリクエストをハンドリングするResource Controllerを作成（確認）します。（オプション：レスポンスの文字列を適宜に変更します。）src/main/java/com/example/restservice/GreetingController.java
+* HTTPリクエストをハンドリングするResource Controllerを作成（確認）します。src/main/java/com/example/restservice/GreetingController.java
 ```java
 package com.example.restservice;
 
