@@ -4,14 +4,14 @@
 このハンズオン演習は、下記Oracle GraalVM Enterpriseハンズオン演習のアドバンス編になります。  
 [Oracle GraalVM Enterprise ハンズオン演習 (Basic編)](https://github.com/junsuzu/graalvm-jp-handson-basic/)
 
-Basic編では、次世代Polyglot(多言語プログラミング）対応実行環境であるOracle GraalVM Enterprise版の導入と操作手順を学びましたが、この演習ではGraalVMとフレームワークによるマイクロサービスの作成を実施します。演習を通して以下の項目を体験することを目的としています。  
+Basic編では、次世代Polyglot(多言語プログラミング）対応実行環境であるOracle GraalVM Enterprise版の導入と操作手順を学びましたが、この演習ではGraalVMとフレームワークによるマイクロサービスの作成を実施します。演習を通じて以下の項目を体験することを目的としています。  
 * GraalVMとMicronautによるアプリケーション開発
-* GraalVMとSpringBootによるアプリケーション開発  
+* GraalVMとSpring Bootによるアプリケーション開発  
 
-このハンズオン演習の対象は上記Basic編を習得済みであることは望ましいが、必須ではありません。  
+このハンズオン演習の前提は上記Basic編を習得済みであることは望ましいが、必須ではありません。  
 
 ※この内容はOracle Java GBU主催のOracle GraalVM Enterprise 最新動向&ハンズオン・ワークショップの演習部分にあたります。  
-参加者はこちらの内容に沿って事前環境セットアップおよび当日演習を実施して頂けます。また単独でGraalVMのアドバンス編演習としてもご利用頂けます。  
+参加者はこちらの内容に沿って事前環境セットアップおよび当日の演習を実施して頂けます。また単独でGraalVMのアドバンス編演習としてもご利用頂けます。  
 <br/>
 
 ## ＜前提環境／事前準備＞
@@ -23,35 +23,35 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * IntelliJ IDEA Community 2020.3 Windows版(オプション)
 * [Docker環境設定](#付録-Docker環境設定)
 
-※ハンズオンの参加者は事前セットアップ済みの環境でハンズオン演習を実施して頂きます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
+※ハンズオンの参加者は事前セットアップ済みの環境でハンズオン演習を実施して頂けます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
 <br/>
 
 
 ## ＜演習内容＞
 
-* **[演習 1: GraalVMとMicronautによるマイクロサービス作成](#演習-1-GraalVMとMicronautによるマイクロサービス作成)**
-   * [1.1: Micronautアプリケーションの作成と起動](#11-Micronautアプリケーションの作成と起動)
-   * [1.2: GraalVMを使用してNative Imageを作成](#12-GraalVMを使用してNative-Imageを作成)
-   * [1.3: Dockerを使用してNative Imageを作成](#13-Dockerを使用してNative-Imageを作成)
+* **[演習1: GraalVMとMicronautによるマイクロサービス作成](#演習1-GraalVMとMicronautによるマイクロサービス作成)**
+   * [1.1 Micronautアプリケーションの作成と起動](#11-Micronautアプリケーションの作成と起動)
+   * [1.2 MicronautアプリケーションからNative Imageを作成](#12-MicronautアプリケーションからNative-Imageを作成)
+   * [1.3 Native Imageを含むDockerコンテナを作成](#13-Native-Imageを含むDockerコンテナを作成)
    
 
-* **[演習 2: GraalVMとSpringBootによるマイクロサービス作成](#演習-2-GraalVMとSpringBootによるマイクロサービス作成)**
-   * [2.1: SpringフレームワークでRESTfulのWebサービスを作成](#21-SpringフレームワークでRESTfulのWebサービスを作成)
-   * [2.2: SpringアプリケーションからNative Imageを生成](#22-Springアプリケーションからnative-imageを生成)
-   * [2.3: Native Imageを含むDockerコンテナを生成](#23-native-imageを含むDockerコンテナを生成)
+* **[演習2: GraalVMとSpring Bootによるマイクロサービス作成](#演習2-GraalVMとSpring-Bootによるマイクロサービス作成)**
+   * [2.1 Spring BootによるRESTful Webサービス作成](#21-Spring-BootによるRESTful-Webサービス作成)
+   * [2.2 SpringアプリケーションからNative Imageを作成](#22-SpringアプリケーションからNative-Imageを作成)
+   * [2.3 Native Imageを含むDockerコンテナを作成](#23-Native-Imageを含むDockerコンテナを作成)
 <br/>
 <br/>
 
 
-# 演習-1-GraalVMとMicronautによるマイクロサービス作成
+# 演習1: GraalVMとMicronautによるマイクロサービス作成
 
 この演習では、以下の内容を実施します。  
 * Micronautアプリケーションの導入と稼働確認
 * GraalVMでMicronautアプリのnative imageの作成と稼働確認
-* Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+* Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認  
 </br>
 
-# 1.1-Micronautアプリケーションの作成と起動
+# 1.1 Micronautアプリケーションの作成と起動
 
 (1) Micronautアプリケーションの作成  
 
@@ -152,7 +152,7 @@ Microanutアプリケーションの起動時間をメモっておきます。
 アプリケーションをCtrl+Cで停止します。  
 <br/>
 
-# 1.2: GraalVMを使用してNative Imageを作成
+# 1.2 MicronautアプリケーションからNative Imageを作成
 
 (1) Basic編演習で導入したGraalVMのバージョンを再確認します。(GraalVMのバージョンは20.1.0以上であれば問題ありません。)
 
@@ -203,7 +203,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 アプリケーションをCtrl+Cで停止します。  
 <br/>
 
-# 1.3: Dockerを使用してNative Imageを作成
+# 1.3 Native Imageを含むDockerコンテナを作成
 
 (1)Dockerデーモンを起動します。本演習の環境ではWindowsのDocker DesktopをDockerデーモンとして2375番ポートでオープンし、Ubuntu側のDockerクライアントはそのデーモンに接続します。下記はDocker Desktopのsetting画面です。
 
@@ -336,7 +336,7 @@ gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16
 アプリケーションをCtrl+Cで停止します。  
 <br/>
 
-# 演習 2: GraalVMとSpringBootによるマイクロサービス作成
+# 演習2: GraalVMとSpring Bootによるマイクロサービス作成
 この演習では、以下の内容を実施します。  
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
 * GraalVMでSpring Bootアプリのnative imageの作成と稼働確認
@@ -444,7 +444,7 @@ public class GreetingController {
 $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
-# 2.2 SpringアプリケーションからNative Imageを生成
+# 2.2 SpringアプリケーションからNative Imageを作成
 GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
 
 (1)pom.xmlを編集します。  
@@ -578,7 +578,7 @@ INFO: Starting ProtocolHandler ["http-nio-8080"]
 $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World with Native Image!"}
 ```
-# 2.3 Native Imageを含むDockerコンテナを生成
+# 2.3 Native Imageを含むDockerコンテナを作成
 Spring Bootが[Cloud Native Buildpacks](https://buildpacks.io/)へのサポートを提供し、Dockerfileを書かずにMavenおよびGradleプラグインからDockerイメージをビルドする機能をサポートします。
 
 (1)演習2.2で編集したpom.xmlに対しさらに編集を加えます。  
