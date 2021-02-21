@@ -297,7 +297,7 @@ BUILD SUCCESSFUL in 5m 59s
 
 ```
 
-(3)Dockerコンテナを起動します。
+(4)Dockerコンテナを起動します。
 ```
 $ docker run -p 8080:8080 complete
  __  __ _                                  _
@@ -335,6 +335,7 @@ gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16
 ```
 アプリケーションをCtrl+Cで停止します。  
 <br/>
+
 # 演習 2: GraalVMとSpringBootによるマイクロサービス作成
 この演習では、以下の内容を実施します。  
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
