@@ -174,28 +174,16 @@ Microanutアプリケーションの起動時間をメモっておきます。
   >$ ./gradlew nativeImage  
   >```
 <br/>
-mavenでビルドする場合、下記コマンドを使用します。
-
-  >```sh
-  >$ ./mvn package -Dpackaging=native-image  
-  >```
-<br/>
 
 環境によってNative Imageビルドに少し時間がかかります。下図のようにビルド成功のメッセージを確認します。  
 
 ![Download Picture 1](images/GraalVMadvance01.JPG)
 
 gradleを利用しビルドした結果、build/native-image/配下にapplicationという名前のNative Imageが作成されていることが確認できます。  
-mavenを利用した場合、./target配下となります。  
 
 (3)作成したMicronautアプリケーションのNative Imageを動かしてみましょう。  
-* gradleの場合
   >```sh
   >$ ./build/native-image/application  
-  >```
-* mavenの場合
-  >```sh
-  >$ ./target/application  
   >```
 
 アプリケーション起動した結果、8080番ポートでMicronautアプリケーションのサービスが短い時間で起動していることが確認できます。
@@ -217,7 +205,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 
 # 1.3: GraalVMとDockerでNative Imageを作成
 
-(1)Dockerデーモンを起動します。本演習の環境ではWindowsのDocker DesktopをDockerデーモンとして2375番ポートでオープンします。Ubuntu側のDockerクライアントはそのデーモンに接続します。下記はDocker Desktopのsetting画面です。
+(1)Dockerデーモンを起動します。本演習の環境ではWindowsのDocker DesktopをDockerデーモンとして2375番ポートでオープンし、Ubuntu側のDockerクライアントはそのデーモンに接続します。下記はDocker Desktopのsetting画面です。
 
 ![Download Picture 2](images/GraalVMadvance02.JPG)
 
@@ -245,67 +233,68 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 $ ./gradlew dockerBuildNative
 
 > Task :dockerfileNative
-Dockerfile written to: /home/linuser/work/complete/build/docker/DockerfileNative
+Dockerfile written to: /home/linuser/work1/complete/build/docker/DockerfileNative
 
 > Task :dockerBuildNative
-Building image using context '/home/linuser/work/complete'.
-Using Dockerfile '/home/linuser/work/complete/build/docker/DockerfileNative'
+Building image using context '/home/linuser/work1/complete'.
+Using Dockerfile '/home/linuser/work1/complete/build/docker/DockerfileNative'
 Using images 'complete'.
 Step 1/10 : FROM ghcr.io/graalvm/graalvm-ce:java8-21.0.0 AS graalvm
  ---> b16c825a27d5
 Step 2/10 : RUN gu install native-image
- ---> Running in 12b7541f509d
+ ---> Running in 47758b9112dd
 Downloading: Component catalog from www.graalvm.org
 Processing Component: Native Image
 Downloading: Component native-image: Native Image  from github.com
 Installing new component: Native Image (org.graalvm.native-image, version 21.0.0)
 Refreshed alternative links in /usr/bin/
-Removing intermediate container 12b7541f509d
- ---> fbb638ac0eec
+Removing intermediate container 47758b9112dd
+ ---> 902d474d0727
 Step 3/10 : WORKDIR /home/app
- ---> Running in 6d6e83ccde66
-Removing intermediate container 6d6e83ccde66
- ---> 026389920310
+ ---> Running in f874c6caf817
+Removing intermediate container f874c6caf817
+ ---> a110ef22617a
 Step 4/10 : COPY build/layers/libs /home/app/libs
- ---> f578c3bf7b3c
+ ---> 862c5443a4b7
 Step 5/10 : COPY build/layers/resources /home/app/resources
- ---> 6357d0efca7d
+ ---> 929dafbc359f
 Step 6/10 : COPY build/layers/application.jar /home/app/application.jar
- ---> 8bea9004a758
+ ---> 631a2282e6f3
 Step 7/10 : RUN native-image -H:+StaticExecutableWithDynamicLibC -H:Class=example.micronaut.Application -H:Name=application --no-fallback -cp /home/app/libs/*.jar:/home/app/resources:/home/app/application.jar
- ---> Running in ea875cb029c9
-[application:20]    classlist:   7,182.37 ms,  1.54 GB
-[application:20]        (cap):     881.12 ms,  2.15 GB
-[application:20]        setup:   3,000.94 ms,  2.15 GB
-[application:20]     (clinit):   1,006.71 ms,  2.53 GB
-[application:20]   (typeflow):  41,681.63 ms,  2.53 GB
-[application:20]    (objects):  27,847.59 ms,  2.53 GB
-[application:20]   (features):   2,351.08 ms,  2.53 GB
-[application:20]     analysis:  75,210.73 ms,  2.53 GB
-[application:20]     universe:   2,866.95 ms,  2.53 GB
-[application:20]      (parse):  11,273.21 ms,  2.35 GB
-[application:20]     (inline):  15,611.99 ms,  2.75 GB
-[application:20]    (compile):  66,151.20 ms,  2.90 GB
-[application:20]      compile:  95,776.74 ms,  2.90 GB
-[application:20]        image:   8,211.37 ms,  2.77 GB
-[application:20]        write:   2,427.36 ms,  2.77 GB
-[application:20]      [total]: 195,062.43 ms,  2.77 GB
-Removing intermediate container ea875cb029c9
- ---> f5a92c52b9a2
-Step 8/10 : FROM gcr.io/distroless/cc-debian10
- ---> fd0fdc7125b0
+ ---> Running in 14e3e0a5acc5
+[application:20]    classlist:   8,757.94 ms,  1.53 GB
+[application:20]        (cap):     766.78 ms,  2.15 GB
+[application:20]        setup:   3,626.91 ms,  2.15 GB
+[application:20]     (clinit):   1,344.38 ms,  2.50 GB
+[application:20]   (typeflow):  54,182.36 ms,  2.50 GB
+[application:20]    (objects):  32,423.72 ms,  2.50 GB
+[application:20]   (features):   2,884.37 ms,  2.50 GB
+[application:20]     analysis:  93,927.58 ms,  2.50 GB
+[application:20]     universe:   4,012.35 ms,  2.53 GB
+[application:20]      (parse):  13,712.06 ms,  2.44 GB
+[application:20]     (inline):  16,792.39 ms,  2.77 GB
+[application:20]    (compile):  76,223.36 ms,  2.91 GB
+[application:20]      compile: 109,982.66 ms,  2.91 GB
+[application:20]        image:   6,079.40 ms,  2.87 GB
+[application:20]        write:   2,425.91 ms,  2.87 GB
+[application:20]      [total]: 229,081.05 ms,  2.87 GB
+Removing intermediate container 14e3e0a5acc5
+ ---> e89139ec8f18
+Step 8/10 : FROM gcr.io/distroless/base
+ ---> a8c775b615ca
 Step 9/10 : COPY --from=graalvm /home/app/application /app/application
- ---> d47cfb74a005
+ ---> b882ff63ce28
 Step 10/10 : ENTRYPOINT ["/app/application"]
- ---> Running in 8e58749cb38f
-Removing intermediate container 8e58749cb38f
- ---> 6ffb95f82e79
-Successfully built 6ffb95f82e79
+ ---> Running in 279e2885208e
+Removing intermediate container 279e2885208e
+ ---> 4b371959869b
+Successfully built 4b371959869b
 Successfully tagged complete:latest
-Created image with ID '6ffb95f82e79'.
+Created image with ID '4b371959869b'.
 
-BUILD SUCCESSFUL in 3m 53s
+BUILD SUCCESSFUL in 5m 59s
 6 actionable tasks: 2 executed, 4 up-to-date
+linuser@JUNSUZU-JP:~/work1/complete$
 
 ```
 
@@ -319,7 +308,8 @@ $ docker run -p 8080:8080 complete
 |_|  |_|_|\___|_|  \___/|_| |_|\__,_|\__,_|\__|
   Micronaut (v2.3.0)
 
-02:21:32.936 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 173ms. Server Running: http://d447523ef3ea:8080
+00:37:55.508 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 118ms. Server Running: http://58e8ea26bdce:8080
+
 ```
 Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較します。  
 
@@ -333,20 +323,19 @@ Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較�
 Docker コンテナとDocker Imageを確認できます。
 ```
 $ docker ps -l
-CONTAINER ID   IMAGE      COMMAND              CREATED         STATUS                            PORTS     NAMES
-d447523ef3ea   complete   "/app/application"   8 minutes ago   Exited (130) About a minute ago             hopeful_lehmann
+CONTAINER ID   IMAGE      COMMAND              CREATED         STATUS         PORTS                    NAMES
+58e8ea26bdce   complete   "/app/application"   2 minutes ago   Up 2 minutes   0.0.0.0:8080->8080/tcp   elated_cartwright
 ```
 ```
 $ docker images
-REPOSITORY                      TAG            IMAGE ID       CREATED          SIZE
-complete                        latest         6ffb95f82e79   11 minutes ago   78.5MB
-<none>                          <none>         f5a92c52b9a2   11 minutes ago   1.39GB
-ghcr.io/graalvm/graalvm-ce      java8-21.0.0   b16c825a27d5   10 days ago      1.29GB
-frolvlad/alpine-glibc           alpine-3.12    d955957758ab   3 weeks ago      17.9MB
-hello-world                     latest         bf756fb1ae65   13 months ago    13.3kB
-gcr.io/distroless/cc-debian10   latest         fd0fdc7125b0   51 years ago     21.2MB
+REPOSITORY                   TAG              IMAGE ID       CREATED          SIZE
+complete                     latest           4b371959869b   12 minutes ago   74.2MB
+<none>                       <none>           e89139ec8f18   13 minutes ago   1.39GB
+ghcr.io/graalvm/graalvm-ce   java8-21.0.0     b16c825a27d5   4 weeks ago      1.29GB
+gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16.9MB
 ```
-
+アプリケーションをCtrl+Cで停止します。  
+<br/>
 # 演習 2: GraalVMとSpringBootによるマイクロサービス作成
 この演習では、以下の内容を実施します。  
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
