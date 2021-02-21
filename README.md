@@ -344,7 +344,7 @@ gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16
 
 </br>
 
-# 2.1 SpringフレームワークでRESTfulのWebサービスを作成
+# 2.1 Spring BootによるRESTful Webサービス作成
 
 この演習の中でHTTPリクエストに対しJSONオブジェクト（Hello World !）をリターンする簡単なSpringアプリケーションを作成します。通常Springアプリケーションの作成はSpring Initializrの利用をお勧めですが、この演習ではサンプルソースコードをダウンロードし、カスタマイズするアプローチで進めます。
 
