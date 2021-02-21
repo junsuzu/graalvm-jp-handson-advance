@@ -610,7 +610,7 @@ defaultValue = "World with Native Image in Docker"
 下記コマンド実行より、Springアプリケーションからnative imageを生成し、それをベースにdocker コンテナイメージをビルドします。  
 (※ビルド時Dockerデーモンを起動している必要があります。この演習ではWindows版Desktop Dockerを起動します。)
 ```
-mvn spring-boot:build-image
+$ ./mvn spring-boot:build-image
 ```
 ビルドが正常終了したことを確認し、docker imagesコマンドで生成されたイメージを確認します。
 ```
@@ -653,10 +653,8 @@ $ curl http://localhost:8080/greeting
 
 ここまでは、Oracle GraalVM Enterprise ハンズオン演習 (Advance編)の内容はすべて終了しました。この演習では以下の項目について学びました。
  
-* GraalVMの導入
-* GraalVM JITコンパイラでJavaクラスを実行
-* GraalVM AOTコンパイラでNative Imageの生成と実行
-* Polyglot 多言語プログラミングと実行 
+* GraalVMとMicronautによるマイクロサービス作成と実行
+* GraalVMとSpringによるマイクロサービス作成と実行
 
 </br>
 
