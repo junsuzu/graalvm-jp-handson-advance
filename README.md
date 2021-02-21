@@ -213,7 +213,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 
   >```sh
   >  dockerfileNative {
-  >  baseImage = "gcr.io/distroless/cc-debian10"
+  >  baseImage = "gcr.io/distroless/base"
   >  }
   >
   >  nativeImage {
