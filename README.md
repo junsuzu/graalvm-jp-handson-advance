@@ -131,7 +131,7 @@ BUILD SUCCESSFUL in 26s
   >```sh
   >$ java -jar build/libs/complete-0.1-all.jar
   >```
-Microanutアプリケーションの起動時間をメモっておきます。
+Microanutアプリケーションの起動時間をメモに記録しておきます。
 
 ```
  __  __ _                                  _
