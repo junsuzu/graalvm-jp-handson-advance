@@ -166,7 +166,7 @@ Microanutアプリケーションの起動時間をメモっておきます。
 
 ![Download Picture 1](images/GraalVMadvance01.JPG)
 
-Gradleでビルドした結果、build/native-image/配下にapplicationという名前のNative Imageが作成されていることが確認できます。  
+Gradleでビルドした結果、build/native-image/配下にapplicationという名前のnative imageが作成されていることが確認できます。  
 
 (2)作成したMicronautアプリケーションのnative imageを動かしてみましょう。  
   >```sh
@@ -306,7 +306,7 @@ Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較�
   >```
 <br/>
 
-Docker コンテナとDocker Imageを確認できます。
+Docker コンテナとDockerイメージを確認できます。
 ```
 $ docker ps -l
 CONTAINER ID   IMAGE      COMMAND              CREATED         STATUS         PORTS                    NAMES
@@ -326,7 +326,7 @@ gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16
 # 演習2: GraalVMとSpring Bootによるマイクロサービス作成
 この演習では、以下の内容を実施します。  
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
-* GraalVMでSpring Bootアプリのnative imageの作成と稼働確認
+* GraalVMでSpringアプリケーションのnative image作成と稼働確認
 * Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 
 </br>
