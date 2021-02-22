@@ -154,20 +154,7 @@ Microanutアプリケーションの起動時間をメモっておきます。
 
 # 1.2 MicronautアプリケーションからNative Imageを作成
 
-(1) Basic編演習で導入したGraalVMのバージョンを再確認します。(GraalVMのバージョンは20.1.0以上であれば問題ありません。)
-
-  >```sh
-  >$ java -version  
-  >```
-
-  >```sh
-  >java version "1.8.0_251"
-  >Java(TM) SE Runtime Environment (build 1.8.0_251-b08)
-  >Java HotSpot(TM) 64-Bit Server VM GraalVM EE 20.1.0 (build 25.251-b08-jvmci-20.1-b02, mixed mode)  
-  >
-<br/>
-
-(2)GraalVMを使用し、MicronautサンプルアプリケーションのNative Imageを作成します。  
+(1) Gradleを使用し、Micronautサンプルアプリケーションのnative imageを作成します。  
 
 
   >```sh
@@ -179,9 +166,9 @@ Microanutアプリケーションの起動時間をメモっておきます。
 
 ![Download Picture 1](images/GraalVMadvance01.JPG)
 
-gradleを利用しビルドした結果、build/native-image/配下にapplicationという名前のNative Imageが作成されていることが確認できます。  
+Gradleでビルドした結果、build/native-image/配下にapplicationという名前のNative Imageが作成されていることが確認できます。  
 
-(3)作成したMicronautアプリケーションのNative Imageを動かしてみましょう。  
+(2)作成したMicronautアプリケーションのnative imageを動かしてみましょう。  
   >```sh
   >$ ./build/native-image/application  
   >```
