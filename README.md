@@ -108,7 +108,7 @@ public class HelloController {
 * ③ デフォルトではMicronautアプリのレスポンスのContentTypeはapplicaiton/jasonです。ここではJSONオブジェクトの代わりにStringをリターンしますので、text/plain を明示的に指定します。
 * ④　"Hello World"　をリターンします。
 
-(4)IntelliJ IDEA上Javaソースを保存したら、LinuxターミナルからMicronautアプリケーションをbuildします。  
+(4)Javaソースファイルができましたら、LinuxターミナルからMicronautアプリケーションをbuildします。  
 ※以降のコマンドはすべてcomplete配下で実行してください。
 
   >```sh
