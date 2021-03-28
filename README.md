@@ -448,7 +448,7 @@ profileタグの中にGraalVM提供のnative-image-maven-pluginおよびSpring�
         <plugin>
           <groupId>org.graalvm.nativeimage</groupId>
           <artifactId>native-image-maven-plugin</artifactId>
-          <version>20.3.0</version>
+          <version>21.0.0</version>
           <configuration>
             <mainClass>com.example.restservice.RestServiceApplication</mainClass>
             <buildArgs>-Dspring.native.remove-yaml-support=true -Dspring.spel.ignore=true</buildArgs>
@@ -501,10 +501,10 @@ profileタグの中にGraalVM提供のnative-image-maven-pluginおよびSpring�
     </pluginRepository>
 </pluginRepositories>
 ```
-propertiesタグにテストをスキップするよう定義します。
+propertiesタグにjavaバージョンを指定し、テストをスキップするよう定義します。
 ```
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<skipTests>true</skipTests>
 	</properties>
 ```
@@ -597,7 +597,7 @@ defaultValue = "World with Native Image in Docker"
 下記コマンド実行より、Spring Bootアプリケーションからnative imageを生成し、それを含むDockerコンテナイメージをビルドします。  
 (※ビルド時Dockerデーモンを起動している必要があります。この演習ではWindows版Desktop Dockerを起動します。)
 ```
-$ ./mvn spring-boot:build-image
+$ ./mvnw spring-boot:build-image
 ```
 ビルドが正常終了したことを確認し、docker imagesコマンドで生成されたイメージを確認します。
 ```
