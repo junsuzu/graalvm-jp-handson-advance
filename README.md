@@ -16,7 +16,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 ## ＜前提環境／事前準備＞
 * OS: Windows10 + WSL(Windows Subsystem for Linux) + Ubuntu20.04  
-* GraalVM EE 20.3.0 Java8 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
+* GraalVM EE 21.0.0 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
 * Docker Engine on Ubuntu ([Install Docker Engine on Ubuntu](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)) 
 * Docker Desktop for Windows ([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
 * Micronaut Linux版 ([SDKmanによるインストール](https://micronaut.io/download.html))
@@ -162,11 +162,8 @@ Microanutアプリケーションの起動時間をメモに記録しておき�
   >```
 <br/>
 
-環境によってNative Imageビルドに少し時間がかかります。下図のようにビルド成功のメッセージを確認します。  
-
-![Download Picture 1](images/GraalVMadvance01.JPG)
-
-Gradleでビルドした結果、build/native-image/配下にapplicationという名前のnative imageが作成されていることが確認できます。  
+環境によってNative Imageビルドに少し時間がかかります。  
+Gradleで正常にビルドした結果、build/native-image/配下にapplicationという名前のnative imageが作成されていることが確認できます。  
 
 (2)作成したMicronautアプリケーションのnative imageを動かしてみましょう。  
   >```sh
