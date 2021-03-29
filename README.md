@@ -217,8 +217,6 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
   >```sh
   >$  docker build -f Dockerfile.distroless -t complete:distroless .
   >```
-
-Dockerのビルドが正常に終了していることを確認します。
 <br/>
 
 (4)Dockerコンテナを起動します。
