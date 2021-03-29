@@ -245,20 +245,6 @@ Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較�
   >```
 <br/>
 
-Docker コンテナとDockerイメージを確認できます。
-```
-$ docker ps -l
-CONTAINER ID   IMAGE      COMMAND              CREATED         STATUS         PORTS                    NAMES
-58e8ea26bdce   complete   "/app/application"   2 minutes ago   Up 2 minutes   0.0.0.0:8080->8080/tcp   elated_cartwright
-```
-```
-$ docker images
-REPOSITORY                   TAG              IMAGE ID       CREATED          SIZE
-complete                     latest           4b371959869b   12 minutes ago   74.2MB
-<none>                       <none>           e89139ec8f18   13 minutes ago   1.39GB
-ghcr.io/graalvm/graalvm-ce   java8-21.0.0     b16c825a27d5   4 weeks ago      1.29GB
-gcr.io/distroless/base       latest           a8c775b615ca   51 years ago     16.9MB
-```
 アプリケーションをCtrl+Cで停止します。  
 <br/>
 
