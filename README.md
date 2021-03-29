@@ -19,7 +19,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * GraalVM EE 21.0.0 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
 * Docker Engine on Ubuntu ([Install Docker Engine on Ubuntu](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)) 
 * Docker Desktop for Windows ([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
-* Micronaut Linux版 ([SDKmanによるインストール](https://micronaut.io/download.html))
+* Micronaut Linux版(オプション) ([SDKmanによるインストール](https://micronaut.io/download.html))
 * IntelliJ IDEA Community 2020.3 Windows版(オプション)
 * [Docker環境設定](#付録-Docker環境設定)
 
@@ -62,7 +62,12 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 ![Download Picture 4](images/GraalVMadvance04.JPG)
 
-上記コマンドより、completeフォルダが作成されていることをご確認ください。
+上記コマンドより、completeフォルダが作成されていることをご確認ください。  
+※Micronautを導入しない場合、下記コマンドでGitHubよりサンプルソースコードをダウンロードして利用してください。
+  >```sh
+  >$ git clone https://github.com/micronaut-guides/creating-your-first-micronaut-app.git
+  >```
+
 <br/>
 
 (2)エディターもしくはIDE環境を使用し、上記(1)で作成したアプリケーションをカスタマイズし、Micronautコントローラーを追加します。  
