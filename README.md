@@ -154,7 +154,16 @@ Microanutアプリケーションの起動時間をメモに記録しておき�
 
 # 1.2 MicronautアプリケーションからNative Imageを作成
 
-(1) Gradleを使用し、Micronautサンプルアプリケーションのnative imageを作成します。  
+(1)complete配下のbuild.gradleを修正し、下記定義を追加し、ファイルを保存します。  
+この定義により、native imageを生成時に、プラットフォーム依存のC標準libc以外は、すべての依存ライブラリをアプリケーションと静的に関連付けすることができます。これにより実行時の依存ライブラリへの動的参照を最小限に抑え、実行時のオーバーヘッドを低減させる効果があります。
+
+  >```sh
+  >  nativeImage {
+  >  args("-H:+StaticExecutableWithDynamicLibC")
+  >  }
+  >```
+
+(2) Gradleを使用し、Micronautサンプルアプリケーションのnative imageを作成します。  
 
 
   >```sh
@@ -165,7 +174,7 @@ Microanutアプリケーションの起動時間をメモに記録しておき�
 環境によってNative Imageビルドに少し時間がかかります。  
 Gradleで正常にビルドした結果、build/native-image/配下にapplicationという名前のnative imageが作成されていることが確認できます。  
 
-(2)作成したMicronautアプリケーションのnative imageを動かしてみましょう。  
+(3)作成したMicronautアプリケーションのnative imageを動かしてみましょう。  
   >```sh
   >$ ./build/native-image/application  
   >```
@@ -193,97 +202,32 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 
 ![Download Picture 2](images/GraalVMadvance02.JPG)
 
-(2)complete配下のbuild.gradleを修正し、下記定義を追加し、ファイルを保存します。  
+(2)complete配下に、Dockerfile.distrolessという名前のDockerファイルを作成します。ファイルの中に、軽量なベースイメージおよび生成済みのnative imageを指定します。
 
   >```sh
-  >  dockerfileNative {
-  >  baseImage = "gcr.io/distroless/base"
-  >  }
-  >
-  >  nativeImage {
-  >  args("-H:+StaticExecutableWithDynamicLibC")
-  >  }
+  >FROM gcr.io/distroless/base
+  >COPY build/native-image/application app
+  >ENTRYPOINT ["/app"]
   >```
+<br/>  
+
 
 (3)Native Imageを含むDockerイメージをビルドします。complete配下で以下のコマンドを実行します。
 
   >```sh
-  >$ ./gradlew dockerBuildNative
+  >$  docker build -f Dockerfile.distroless -t complete:distroless .
   >```
+
+Dockerのビルドが正常に終了していることを確認します。
 <br/>
-以下のようにDockerのビルドが正常に終了していることを確認します。
-
-```
-$ ./gradlew dockerBuildNative
-
-> Task :dockerfileNative
-Dockerfile written to: /home/linuser/work1/complete/build/docker/DockerfileNative
-
-> Task :dockerBuildNative
-Building image using context '/home/linuser/work1/complete'.
-Using Dockerfile '/home/linuser/work1/complete/build/docker/DockerfileNative'
-Using images 'complete'.
-Step 1/10 : FROM ghcr.io/graalvm/graalvm-ce:java8-21.0.0 AS graalvm
- ---> b16c825a27d5
-Step 2/10 : RUN gu install native-image
- ---> Running in 47758b9112dd
-Downloading: Component catalog from www.graalvm.org
-Processing Component: Native Image
-Downloading: Component native-image: Native Image  from github.com
-Installing new component: Native Image (org.graalvm.native-image, version 21.0.0)
-Refreshed alternative links in /usr/bin/
-Removing intermediate container 47758b9112dd
- ---> 902d474d0727
-Step 3/10 : WORKDIR /home/app
- ---> Running in f874c6caf817
-Removing intermediate container f874c6caf817
- ---> a110ef22617a
-Step 4/10 : COPY build/layers/libs /home/app/libs
- ---> 862c5443a4b7
-Step 5/10 : COPY build/layers/resources /home/app/resources
- ---> 929dafbc359f
-Step 6/10 : COPY build/layers/application.jar /home/app/application.jar
- ---> 631a2282e6f3
-Step 7/10 : RUN native-image -H:+StaticExecutableWithDynamicLibC -H:Class=example.micronaut.Application -H:Name=application --no-fallback -cp /home/app/libs/*.jar:/home/app/resources:/home/app/application.jar
- ---> Running in 14e3e0a5acc5
-[application:20]    classlist:   8,757.94 ms,  1.53 GB
-[application:20]        (cap):     766.78 ms,  2.15 GB
-[application:20]        setup:   3,626.91 ms,  2.15 GB
-[application:20]     (clinit):   1,344.38 ms,  2.50 GB
-[application:20]   (typeflow):  54,182.36 ms,  2.50 GB
-[application:20]    (objects):  32,423.72 ms,  2.50 GB
-[application:20]   (features):   2,884.37 ms,  2.50 GB
-[application:20]     analysis:  93,927.58 ms,  2.50 GB
-[application:20]     universe:   4,012.35 ms,  2.53 GB
-[application:20]      (parse):  13,712.06 ms,  2.44 GB
-[application:20]     (inline):  16,792.39 ms,  2.77 GB
-[application:20]    (compile):  76,223.36 ms,  2.91 GB
-[application:20]      compile: 109,982.66 ms,  2.91 GB
-[application:20]        image:   6,079.40 ms,  2.87 GB
-[application:20]        write:   2,425.91 ms,  2.87 GB
-[application:20]      [total]: 229,081.05 ms,  2.87 GB
-Removing intermediate container 14e3e0a5acc5
- ---> e89139ec8f18
-Step 8/10 : FROM gcr.io/distroless/base
- ---> a8c775b615ca
-Step 9/10 : COPY --from=graalvm /home/app/application /app/application
- ---> b882ff63ce28
-Step 10/10 : ENTRYPOINT ["/app/application"]
- ---> Running in 279e2885208e
-Removing intermediate container 279e2885208e
- ---> 4b371959869b
-Successfully built 4b371959869b
-Successfully tagged complete:latest
-Created image with ID '4b371959869b'.
-
-BUILD SUCCESSFUL in 5m 59s
-6 actionable tasks: 2 executed, 4 up-to-date
-
-```
 
 (4)Dockerコンテナを起動します。
-```
-$ docker run -p 8080:8080 complete
+
+  >```sh
+  >$  docker build -f Dockerfile.distroless -t complete:distroless .
+  >```
+<br/>
+
  __  __ _                                  _
 |  \/  (_) ___ _ __ ___  _ __   __ _ _   _| |_
 | |\/| | |/ __| '__/ _ \| '_ \ / _` | | | | __|
