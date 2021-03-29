@@ -224,10 +224,10 @@ Dockerのビルドが正常に終了していることを確認します。
 (4)Dockerコンテナを起動します。
 
   >```sh
-  >$  docker build -f Dockerfile.distroless -t complete:distroless .
+  >$ docker run --rm -p 8080:8080 complete:distroless
   >```
-<br/>
 
+Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較します。
 ```
  __  __ _                                  _
 |  \/  (_) ___ _ __ ___  _ __   __ _ _   _| |_
@@ -239,7 +239,6 @@ Dockerのビルドが正常に終了していることを確認します。
 00:37:55.508 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 118ms. Server Running: http://58e8ea26bdce:8080
 
 ```
-Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較します。  
 
 別ターミナルを立ち上げ、起動中のDockerサービスに対してリクエストを送ってみます。レスポンスのHello Worldが表示されることを確認します。
   >```sh
