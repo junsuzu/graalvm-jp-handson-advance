@@ -117,7 +117,7 @@ public class HelloController {
 ※以降のコマンドはすべてcomplete配下で実行してください。
 
   >```sh
-  >$ ./gradlew build
+  >$ ./gradlew assemble
   >```
 出力結果をご確認ください。
 
