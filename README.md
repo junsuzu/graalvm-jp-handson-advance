@@ -446,7 +446,7 @@ defaultValue = "World with Native Image"
 ```sh
 $ ./mvnw -Pnative clean package
 ```
-※-Pnativeを指定することにより、profileタグ内の定義が有効になりなす。  
+※  
 Native Imageが正常にビルドされることを確認します。
 
 ```
