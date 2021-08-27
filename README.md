@@ -446,7 +446,6 @@ defaultValue = "World with Native Image"
 ```sh
 $ ./mvnw -Pnative clean package
 ```
-※  
 Native Imageが正常にビルドされることを確認します。
 
 ```
