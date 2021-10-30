@@ -1,5 +1,6 @@
 # Oracle GraalVM Enterprise ハンズオン演習 (Advance編)
 
+「2021-10-31 update：Spring BootおよびSpring Nativeのバージョン更新」
 ## ＜目的と対象＞：
 このハンズオン演習は、下記Oracle GraalVM Enterpriseハンズオン演習のアドバンス編になります。  
 [Oracle GraalVM Enterprise ハンズオン演習 (Basic編)](https://github.com/junsuzu/graalvm-jp-handson-basic/)
@@ -548,7 +549,7 @@ Native Imageが正常にビルドされることを確認します。
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  08:16 min
 ```
-target配下にnative image "com.example.restservice.restserviceapplication"が生成されたことを確認します。
+target配下にnative image "rest-service-complete"が生成されたことを確認します。
 
 (4)以下のコマンドでnative imageを実行します。
 ```
