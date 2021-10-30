@@ -1,6 +1,7 @@
 # Oracle GraalVM Enterprise ハンズオン演習 (Advance編)
 
-## 「2021-10-31 update：Spring BootおよびSpring Nativeのバージョンを最新版に更新」
+## 「2021-10-31 update」
+Spring BootおよびSpring Nativeのバージョンを最新版に更新
 ## ＜目的と対象＞：
 このハンズオン演習は、下記Oracle GraalVM Enterpriseハンズオン演習のアドバンス編になります。  
 [Oracle GraalVM Enterprise ハンズオン演習 (Basic編)](https://github.com/junsuzu/graalvm-jp-handson-basic/)
