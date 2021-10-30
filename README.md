@@ -405,9 +405,7 @@ $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
 # 2.2 SpringアプリケーションからNative Imageを作成
-要修正：GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
-
-(1)pom.xmlを編集します。
+(1)pom.xmlを編集します。　　
 ＜１＞Springアプリケーションをnative imageとして実行するため、「spring-native」dependencyを指定します。バージョンは0.10.5に指定します。
 ```
 <dependencies>
