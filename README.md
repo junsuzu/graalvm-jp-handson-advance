@@ -16,7 +16,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 ## ＜前提環境／事前準備＞
 * OS: Windows10 + WSL(Windows Subsystem for Linux) + Ubuntu20.04  
-* GraalVM EE 21.0.0 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
+* GraalVM EE 21.2.0.1 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
 * Docker Engine on Ubuntu ([Install Docker Engine on Ubuntu](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)) 
 * Docker Desktop for Windows ([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
 * Micronaut Linux版(オプション) ([SDKmanによるインストール](https://micronaut.io/download.html))
@@ -274,8 +274,8 @@ Githubよりソースをダウンロードします。ダウンロード後compl
   >cd gs-rest-service/complete
   >```
 
-(2)IntelliJ IDEAなどのIDEを使ってcompleteフォルダーを開き、中にあるJavaソースやpom.xmlを編集します。（もしくは直接エディターで編集）  
-* Plain Java Objectクラスを作成(確認)します。src/main/java/com/example/restservice/Greeting.java　　
+(2)VScodeなどのIDEを使ってcompleteフォルダーを開き、中にあるJavaソースやpom.xmlを編集します。  
+* Plain Java Objectクラスを作成します。src/main/java/com/example/restservice/Greeting.java　　
 ```java
 package com.example.restservice;
 
@@ -320,41 +320,84 @@ public class GreetingController {
 	}
 }
 ```
-(3)Mavenを使い実行可能なJARファイルにビルドし、実行します。
+
+(3)pom.xmlを開き、Spring Nativeのバージョンを2.5.6、Javaバージョンを本演習環境に合わせて1.8から11に変更します。
+```
+ <?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+	<groupId>com.example</groupId>
+	<artifactId>rest-service-complete</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>rest-service-complete</name>
+	<description>Demo project for Spring Boot</description>
+	<properties>
+		<java.version>11</java.version>
+	</properties>
+```
+
+(4)Mavenを使い実行可能なJARファイルにビルドし、実行します。
  >```sh
  >./mvnw clean package
  >```
 ```
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.808 s - in com.example.restservice.GreetingControllerTests
 [INFO]
 [INFO] Results:
 [INFO]
 [INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
 [INFO]
 [INFO]
-[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ rest-service ---
-[INFO] Building jar: /home/linuser/work2/gs-rest-service/complete/target/rest-service-0.0.1-SNAPSHOT.jar
+[INFO] --- maven-jar-plugin:3.2.0:jar (default-jar) @ rest-service-complete ---
+[INFO] Building jar: /home/linuser/project/tmp/test/gs-rest-service/complete/target/rest-service-complete-0.0.1-SNAPSHOT.jar
 [INFO]
-[INFO] --- spring-boot-maven-plugin:2.4.2:repackage (repackage) @ rest-service ---
+[INFO] --- spring-boot-maven-plugin:2.5.6:repackage (repackage) @ rest-service-complete ---
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.5.6/spring-boot-buildpack-platform-2.5.6.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.5.6/spring-boot-buildpack-platform-2.5.6.pom (3.2 kB at 5.5 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.5.6/spring-boot-loader-tools-2.5.6.pom
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.5.6/spring-boot-loader-tools-2.5.6.pom (2.3 kB at 4.8 kB/s)
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.5.6/spring-boot-buildpack-platform-2.5.6.jar
+Downloading from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.5.6/spring-boot-loader-tools-2.5.6.jar
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-loader-tools/2.5.6/spring-boot-loader-tools-2.5.6.jar (250 kB at 379 kB/s)
+Downloaded from central: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-buildpack-platform/2.5.6/spring-boot-buildpack-platform-2.5.6.jar (238 kB at 353 kB/s)
 [INFO] Replacing main artifact with repackaged archive
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  42.415 s
-[INFO] Finished at: 2021-02-18T12:23:28+09:00
-[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  44.067 s
+[INFO] Finished at: 2021-10-30T14:50:48+09:00
 ```
 
 正常ビルド完了後、JARファイルを実行します。Web Serviceの起動時間を確認します。
 >```sh
- >java -jar target/rest-service-0.0.1-SNAPSHOT.jar
+ >java -jar target/rest-service-complete-0.0.1-SNAPSHOT.jar
  >```
 
 ```
-2021-02-18 12:26:24.325  INFO 1376 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2021-02-18 12:26:24.328  INFO 1376 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3107 ms
-2021-02-18 12:26:24.903  INFO 1376 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2021-02-18 12:26:25.555  INFO 1376 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2021-02-18 12:26:25.600  INFO 1376 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 5.848 seconds (JVM running for 7.438)
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.6)
+
+2021-10-30 14:52:13.829  INFO 2195 --- [           main] c.e.restservice.RestServiceApplication   : Starting RestServiceApplication v0.0.1-SNAPSHOT using Java 11.0.12 on JUNSUZU-JP with PID 2195 (/home/linuser/project/tmp/test/gs-rest-service/complete/target/rest-service-complete-0.0.1-SNAPSHOT.jar started by linuser in /home/linuser/project/tmp/test/gs-rest-service/complete)
+2021-10-30 14:52:13.836  INFO 2195 --- [           main] c.e.restservice.RestServiceApplication   : No active profile set, falling back to default profiles: default
+2021-10-30 14:52:15.274  INFO 2195 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2021-10-30 14:52:15.292  INFO 2195 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-10-30 14:52:15.293  INFO 2195 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.54]
+2021-10-30 14:52:15.374  INFO 2195 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-10-30 14:52:15.375  INFO 2195 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1464 ms
+2021-10-30 14:52:15.949  INFO 2195 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-10-30 14:52:15.987  INFO 2195 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 2.644 seconds (JVM running for 3.321)
 ```
 (4)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
 ```sh
@@ -362,132 +405,177 @@ $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
 # 2.2 SpringアプリケーションからNative Imageを作成
-GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
+要修正：GraalVMからnative-image-maven-pluginが提供され、mavenコマンドによってSpringアプリケーションをnative imageにビルドすることが可能です。
 
-(1)pom.xmlを編集します。  
-
-profileタグの中にGraalVM提供のnative-image-maven-pluginおよびSpring提供のspring-boot-maven-plugin両方を指定します。以下の内容をpom.xmlに追加します。  
-(※-Dspring.native.remove-yaml-support=true と -Dspring.spel.ignore=true はフットプリントを削減するためのパラメータです。）
-
- ```
-<profiles>
-  <profile>
-    <id>native</id>
-    <build>
-      <plugins>
-        <plugin>
-          <groupId>org.graalvm.nativeimage</groupId>
-          <artifactId>native-image-maven-plugin</artifactId>
-          <version>21.0.0</version>
-          <configuration>
-            <mainClass>com.example.restservice.RestServiceApplication</mainClass>
-            <buildArgs>-Dspring.native.remove-yaml-support=true -Dspring.spel.ignore=true</buildArgs>
-          </configuration>
-          <executions>
-            <execution>
-              <goals>
-                <goal>native-image</goal>
-              </goals>
-              <phase>package</phase>
-            </execution>
-          </executions>
-        </plugin>
-        <plugin>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-maven-plugin</artifactId>
-        </plugin>
-      </plugins>
-    </build>
-  </profile>
-</profiles>
-```
-さらに、dependencyタグにSpring提供のspring-graalvm-native を追加します。
+(1)pom.xmlを編集します。
+＜１＞Springアプリケーションをnative imageとして実行するため、「spring-native」dependencyを指定します。バージョンは0.10.5に指定します。
 ```
 <dependencies>
-    <!-- ...... -->
+    <!-- ... -->
     <dependency>
         <groupId>org.springframework.experimental</groupId>
-        <artifactId>spring-graalvm-native</artifactId>
-        <version>0.8.5</version>
+        <artifactId>spring-native</artifactId>
+        <version>0.10.5</version>
     </dependency>
 </dependencies>
 ```
-また、以下のリポジトリー定義を追加します。
+
+＜２＞SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供されているspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容を「build」ブロックに追加します。
+```
+<build>
+    <plugins>
+        <!-- ... -->
+        <plugin>
+            <groupId>org.springframework.experimental</groupId>
+            <artifactId>spring-aot-maven-plugin</artifactId>
+            <version>0.10.5</version>
+            <executions>
+                <execution>
+                    <id>test-generate</id>
+                    <goals>
+                        <goal>test-generate</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>generate</id>
+                    <goals>
+                        <goal>generate</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+```
+
+＜３＞Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供されているnative-maven-plugin(0.9.4)をprofileブロックの中で指定します。
+```
+    <profiles>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.graalvm.buildtools</groupId>
+                        <artifactId>native-maven-plugin</artifactId>
+                        <version>0.9.4</version>
+                        <executions>
+                            <execution>
+                                <id>test-native</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <phase>test</phase>
+                            </execution>
+                            <execution>
+                                <id>build-native</id>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                                <phase>package</phase>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- ... -->
+                        </configuration>
+                    </plugin>
+                    <!-- Avoid a clash between Spring Boot repackaging and native-maven-plugin -->
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <configuration>
+                            <classifier>exec</classifier>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+```
+
+＜＜４＞以下「spring-naitve」dependencyおよびpluginを構成するためのリポジトリー「spring-release」を追加します。
 ```
 <repositories>
-    <repository>
-        <id>spring-milestone</id>
-        <name>Spring milestone</name>
-        <url>https://repo.spring.io/milestone</url>
-    </repository>
-</repositories>
+		<!-- ... -->
+		<repository>
+			<id>spring-release</id>
+			<name>Spring release</name>
+			<url>https://repo.spring.io/release</url>
+		</repository>
+	</repositories>
 ```
 ```
 <pluginRepositories>
-    <pluginRepository>
-        <id>spring-milestone</id>
-        <name>Spring milestone</name>
-        <url>https://repo.spring.io/milestone</url>
-    </pluginRepository>
-</pluginRepositories>
+		<!-- ... -->
+		<pluginRepository>
+			<id>spring-release</id>
+			<name>Spring release</name>
+			<url>https://repo.spring.io/release</url>
+		</pluginRepository>
+	</pluginRepositories>
 ```
-propertiesタグにjavaバージョンを指定し、テストをスキップするよう定義します。
-```
-	<properties>
-		<java.version>11</java.version>
-		<skipTests>true</skipTests>
-	</properties>
-```
+
 (2)GreetingController.javaを編集し、レスポンスでリターンされる文字列を変更します。例：  
 ```
 defaultValue = "World with Native Image"
 ```
 (3)以下のコマンドでSpringアプリケーションをnative imageへビルドします。  
 ```sh
-$ ./mvnw -Pnative clean package
+$ ./mvnw -Pnative -DskipTests package
 ```
 Native Imageが正常にビルドされることを確認します。
 
 ```
-Number of types dynamically registered for reflective access: #1452
-[com.example.restservice.restserviceapplication:1934]     (clinit):     930.18 ms,  3.56 GB
-[com.example.restservice.restserviceapplication:1934]   (typeflow):  21,747.29 ms,  3.56 GB
-[com.example.restservice.restserviceapplication:1934]    (objects):  24,425.65 ms,  3.56 GB
-[com.example.restservice.restserviceapplication:1934]   (features):   1,747.57 ms,  3.56 GB
-[com.example.restservice.restserviceapplication:1934]     analysis:  50,500.21 ms,  3.56 GB
-[com.example.restservice.restserviceapplication:1934]     universe:   2,914.62 ms,  3.56 GB
-[com.example.restservice.restserviceapplication:1934]      (parse):  26,267.71 ms,  4.76 GB
-[com.example.restservice.restserviceapplication:1934]     (inline):   6,773.49 ms,  5.20 GB
-[com.example.restservice.restserviceapplication:1934]    (compile): 127,892.37 ms,  6.67 GB
-[com.example.restservice.restserviceapplication:1934]      compile: 164,133.60 ms,  6.67 GB
-[com.example.restservice.restserviceapplication:1934]        image:   4,841.53 ms,  6.67 GB
-[com.example.restservice.restserviceapplication:1934]        write:   3,685.89 ms,  6.67 GB
-[com.example.restservice.restserviceapplication:1934]      [total]: 247,545.92 ms,  6.67 GB
+[rest-service-complete:6797]     (clinit):   2,602.70 ms,  6.71 GB
+[rest-service-complete:6797]   (typeflow):  79,947.44 ms,  6.71 GB
+[rest-service-complete:6797]    (objects):  58,484.88 ms,  6.71 GB
+[rest-service-complete:6797]   (features):   9,333.39 ms,  6.71 GB
+[rest-service-complete:6797]     analysis: 155,122.43 ms,  6.71 GB
+[rest-service-complete:6797]     universe:   9,007.28 ms,  6.71 GB
+[rest-service-complete:6797]      (parse):   8,338.72 ms,  6.71 GB
+[rest-service-complete:6797]     (inline):  10,799.34 ms,  6.40 GB
+[rest-service-complete:6797]    (compile): 183,531.73 ms,  5.73 GB
+[rest-service-complete:6797]      compile: 210,390.41 ms,  5.73 GB
+[rest-service-complete:6797]        image:  24,208.31 ms,  5.79 GB
+[rest-service-complete:6797]        write:   6,097.02 ms,  5.79 GB
+[rest-service-complete:6797]      [total]: 422,965.12 ms,  5.79 GB
+# Printing build artifacts to: /home/linuser/project/tmp/test/gs-rest-service/complete/target/rest-service-complete.build_artifacts.txt
 [INFO]
-[INFO] --- spring-boot-maven-plugin:2.4.2:repackage (repackage) @ rest-service ---
-[INFO] Replacing main artifact with repackaged archive
+[INFO] --- spring-boot-maven-plugin:2.5.6:repackage (repackage) @ rest-service-complete ---
+[INFO] Attaching repackaged archive /home/linuser/project/tmp/test/gs-rest-service/complete/target/rest-service-complete-0.0.1-SNAPSHOT-exec.jar with classifier exec
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  04:18 min
-[INFO] Finished at: 2021-02-18T14:41:39+09:00
-[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  08:16 min
+[INFO] Finished at: 2021-10-30T19:20:28+09:00
 ```
 target配下にnative image "com.example.restservice.restserviceapplication"が生成されたことを確認します。
 
 (4)以下のコマンドでnative imageを実行します。
 ```
-target/com.example.restservice.restserviceapplication
+target/rest-service-complete
 ```
 Springアプリケーションの起動時間を確認し、演習2.1の結果と比較します。
 ```
-INFO: Initializing Spring embedded WebApplicationContext
-2021-02-18 14:47:38.331  INFO 2161 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 36 ms
-2021-02-18 14:47:38.342  INFO 2161 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-Feb 18, 2021 2:47:38 PM org.apache.coyote.AbstractProtocol start
-INFO: Starting ProtocolHandler ["http-nio-8080"]
-2021-02-18 14:47:38.507  INFO 2161 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2021-02-18 14:47:38.508  INFO 2161 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 0.234 seconds (JVM running for 0.236)
+2021-10-30 19:22:26.422  INFO 7007 --- [           main] o.s.nativex.NativeListener               : This application is bootstrapped with code generated with Spring AOT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.6)
+
+2021-10-30 19:22:26.426  INFO 7007 --- [           main] c.e.restservice.RestServiceApplication   : Starting RestServiceApplication v0.0.1-SNAPSHOT using Java 11.0.12 on JUNSUZU-JP with PID 7007 (/home/linuser/project/tmp/test/gs-rest-service/complete/target/rest-service-complete started by linuser in /home/linuser/project/tmp/test/gs-rest-service/complete)
+2021-10-30 19:22:26.427  INFO 7007 --- [           main] c.e.restservice.RestServiceApplication   : No active profile set, falling back to default profiles: default
+2021-10-30 19:22:26.467  INFO 7007 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2021-10-30 19:22:26.468  INFO 7007 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-10-30 19:22:26.469  INFO 7007 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.54]
+2021-10-30 19:22:26.479  INFO 7007 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-10-30 19:22:26.479  INFO 7007 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 49 ms
+2021-10-30 19:22:27.541  INFO 7007 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-10-30 19:22:27.545  INFO 7007 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 1.14 seconds (JVM running for 1.142)
 ```
 (5)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
 ```sh
@@ -508,11 +596,7 @@ Spring Bootから提供されるspring-boot-maven-pluginおよび使用するBui
         <image>
             <builder>paketobuildpacks/builder:tiny</builder>
             <env>
-                <BP_BOOT_NATIVE_IMAGE>true</BP_BOOT_NATIVE_IMAGE>
-                <BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
-                    -Dspring.native.remove-yaml-support=true
-                    -Dspring.spel.ignore=true
-                </BP_BOOT_NATIVE_IMAGE_BUILD_ARGUMENTS>
+                <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
             </env>
         </image>
     </configuration>
@@ -530,34 +614,72 @@ $ ./mvnw spring-boot:build-image
 ```
 ビルドが正常終了したことを確認し、docker imagesコマンドで生成されたイメージを確認します。
 ```
+[INFO]     [creator]     # Printing build artifacts to: /layers/paketo-buildpacks_native-image/native-image/com.example.restservice.RestServiceApplication.build_artifacts.txt
+[INFO]     [creator]       Removing bytecode
+[INFO]     [creator]       Process types:
+[INFO]     [creator]         native-image: /workspace/com.example.restservice.RestServiceApplication (direct)
+[INFO]     [creator]         task:         /workspace/com.example.restservice.RestServiceApplication (direct)
+[INFO]     [creator]         web:          /workspace/com.example.restservice.RestServiceApplication (direct)
+[INFO]     [creator]     ===> EXPORTING
+[INFO]     [creator]     Adding layer 'paketo-buildpacks/ca-certificates:helper'
+[INFO]     [creator]     Adding 1/1 app layer(s)
+[INFO]     [creator]     Adding layer 'launcher'
+[INFO]     [creator]     Adding layer 'config'
+[INFO]     [creator]     Adding layer 'process-types'
+[INFO]     [creator]     Adding label 'io.buildpacks.lifecycle.metadata'
+[INFO]     [creator]     Adding label 'io.buildpacks.build.metadata'
+[INFO]     [creator]     Adding label 'io.buildpacks.project.metadata'
+[INFO]     [creator]     Adding label 'org.opencontainers.image.title'
+[INFO]     [creator]     Adding label 'org.opencontainers.image.version'
+[INFO]     [creator]     Adding label 'org.springframework.boot.version'
+[INFO]     [creator]     Setting default process type 'web'
+[INFO]     [creator]     Saving docker.io/library/rest-service-complete:0.0.1-SNAPSHOT...
+[INFO]     [creator]     *** Images (2732a4cd2039):
+[INFO]     [creator]           docker.io/library/rest-service-complete:0.0.1-SNAPSHOT
+[INFO]     [creator]     Adding cache layer 'paketo-buildpacks/graalvm:jdk'
+[INFO]     [creator]     Adding cache layer 'paketo-buildpacks/native-image:native-image'
 [INFO]
-[INFO] Successfully built image 'docker.io/library/rest-service:0.0.1-SNAPSHOT'
+[INFO] Successfully built image 'docker.io/library/rest-service-complete:0.0.1-SNAPSHOT'
 [INFO]
 [INFO] ------------------------------------------------------------------------
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
-[INFO] Total time:  04:16 min
-[INFO] Finished at: 2021-02-18T22:37:35+09:00
-[INFO] ------------------------------------------------------------------------
-linuser@JUNSUZU-JP:~/work2/gs-rest-service/complete$ docker images
+[INFO] Total time:  07:11 min
+```
+dockerコマンドで生成されたDockerイメージを確認します。
+```
+docker images
 REPOSITORY                 TAG              IMAGE ID       CREATED        SIZE
-paketobuildpacks/run       tiny-cnb         3a4a95267ff3   9 days ago     17.3MB
-paketobuildpacks/builder   tiny             eb48c8dc80d9   41 years ago   406MB
-rest-service               0.0.1-SNAPSHOT   d34a0675c473   41 years ago   79.3MB
+paketobuildpacks/run       tiny-cnb         59e86ed6bb4f   39 hours ago   17.4MB
+rest-service-complete      0.0.1-SNAPSHOT   2732a4cd2039   41 years ago   95.5MB
+paketobuildpacks/builder   tiny             327b16eb4111   41 years ago   455MB
 ```
 (4)上記生成されたDocker コンテナイメージを実行します。 
 ```
-docker run -p 8080:8080 docker.io/library/rest-service:0.0.1-SNAPSHOT
+docker run --rm -p 8080:8080 rest-service-complete:0.0.1-SNAPSHOT
 ```
 コンテナの起動結果および起動時間を確認し、演習2.1,2.2の結果と比較します。
 ```
-INFO: Initializing Spring embedded WebApplicationContext
-2021-02-18 14:13:59.964  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 29 ms
-2021-02-18 14:13:59.976  INFO 1 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-Feb 18, 2021 2:13:59 PM org.apache.coyote.AbstractProtocol start
-INFO: Starting ProtocolHandler ["http-nio-8080"]
-2021-02-18 14:13:59.985  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2021-02-18 14:13:59.986  INFO 1 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 0.061 seconds (JVM running for 0.063)
+docker run --rm -p 8080:8080 rest-service-complete:0.0.1-SNAPSHOT
+2021-10-30 17:11:47.592  INFO 1 --- [           main] o.s.nativex.NativeListener               : This application is bootstrapped with code generated with Spring AOT
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.5.6)
+
+2021-10-30 17:11:47.594  INFO 1 --- [           main] c.e.restservice.RestServiceApplication   : Starting RestServiceApplication using Java 11.0.13 on 1cf719ada7b5 with PID 1 (/workspace/com.example.restservice.RestServiceApplication started by cnb in /workspace)
+2021-10-30 17:11:47.594  INFO 1 --- [           main] c.e.restservice.RestServiceApplication   : No active profile set, falling back to default profiles: default
+2021-10-30 17:11:47.628  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2021-10-30 17:11:47.629  INFO 1 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-10-30 17:11:47.629  INFO 1 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.54]
+2021-10-30 17:11:47.635  INFO 1 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2021-10-30 17:11:47.635  INFO 1 --- [           main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 40 ms
+2021-10-30 17:11:47.660  INFO 1 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2021-10-30 17:11:47.661  INFO 1 --- [           main] c.e.restservice.RestServiceApplication   : Started RestServiceApplication in 0.082 seconds (JVM running for 0.084)
 ```
 (5)別ターミナルを立ち上げ、以下のコマンドを実行し、HTTPリクエストからレスポンスが正常にリターンされることを確認します。
 ```sh
