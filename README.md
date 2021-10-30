@@ -372,7 +372,7 @@ Downloaded from central: https://repo.maven.apache.org/maven2/org/springframewor
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  44.067 s
-[INFO] Finished at: 2021-10-30T14:50:48+09:00
+
 ```
 
 正常ビルド完了後、JARファイルを実行します。Web Serviceの起動時間を確認します。
@@ -406,7 +406,8 @@ $ curl http://localhost:8080/greeting
 ```
 # 2.2 SpringアプリケーションからNative Imageを作成
 (1)pom.xmlを編集します。
-<br/>　　
+<br/>
+
 <1>Springアプリケーションをnative imageとして実行するため、「spring-native」dependencyを指定します。バージョンは0.10.5に指定します。
 ```
 <dependencies>
@@ -546,7 +547,6 @@ Native Imageが正常にビルドされることを確認します。
 [INFO] BUILD SUCCESS
 [INFO] ------------------------------------------------------------------------
 [INFO] Total time:  08:16 min
-[INFO] Finished at: 2021-10-30T19:20:28+09:00
 ```
 target配下にnative image "com.example.restservice.restserviceapplication"が生成されたことを確認します。
 
