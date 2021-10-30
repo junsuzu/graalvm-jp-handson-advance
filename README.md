@@ -405,8 +405,9 @@ $ curl http://localhost:8080/greeting
 {"id":1,"content":"Hello, World!"}
 ```
 # 2.2 SpringアプリケーションからNative Imageを作成
-(1)pom.xmlを編集します。　　
-＜１＞Springアプリケーションをnative imageとして実行するため、「spring-native」dependencyを指定します。バージョンは0.10.5に指定します。
+(1)pom.xmlを編集します。
+<br/>　　
+<1>Springアプリケーションをnative imageとして実行するため、「spring-native」dependencyを指定します。バージョンは0.10.5に指定します。
 ```
 <dependencies>
     <!-- ... -->
@@ -418,7 +419,7 @@ $ curl http://localhost:8080/greeting
 </dependencies>
 ```
 
-＜２＞SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供されているspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容を「build」ブロックに追加します。
+<2>SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供されているspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容を「build」ブロックに追加します。
 ```
 <build>
     <plugins>
@@ -446,7 +447,7 @@ $ curl http://localhost:8080/greeting
 </build>
 ```
 
-＜３＞Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供されているnative-maven-plugin(0.9.4)をprofileブロックの中で指定します。
+<3>Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供されているnative-maven-plugin(0.9.4)をprofileブロックの中で指定します。
 ```
     <profiles>
         <profile>
@@ -491,7 +492,7 @@ $ curl http://localhost:8080/greeting
     </profiles>
 ```
 
-＜＜４＞以下「spring-naitve」dependencyおよびpluginを構成するためのリポジトリー「spring-release」を追加します。
+<4>以下「spring-naitve」dependencyおよびpluginを構成するためのリポジトリー「spring-release」を追加します。
 ```
 <repositories>
 		<!-- ... -->
