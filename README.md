@@ -260,7 +260,7 @@ Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較�
 * GraalVMでSpringアプリケーションのnative image作成と稼働確認
 * Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
 * この演習内容は以下[Spring Native Documentation](https://docs.spring.io/spring-native/docs/current/reference/htmlsingle/)の内容を参照しています。
-* この演習の中で使用しているSpring Bootおよび各dependencyとpluginのバージョンは以下の通りになります。
+* この演習の中で使用しているSpring Bootおよび各依存ライブラリとプラグインのバージョンは以下の通りになります。
   * spring-boot-starter-parent: 2.5.6
   * spring-native: 0.10.5
   * spring-aot-maven-plugin: 0.10.5
