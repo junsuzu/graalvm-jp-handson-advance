@@ -259,6 +259,12 @@ Dockerコンテナーの起動時間と上記演習1.1、1.2の結果と比較�
 * Springフレームワークを利用し、RESTfulのWebサービスを作成
 * GraalVMでSpringアプリケーションのnative image作成と稼働確認
 * Native Imageを含むDockerイメージを作成し、Dockerコンテナによるマイクロサービスの稼働を確認
+* この演習内容は以下Spring Native Documentationの内容を参照しています。
+* この演習の中で使用しているSpring Bootおよび各dependencyとpluginのバージョンは以下の通りになります。
+  * Spring Boot: 2.5.6
+  * spring-native: 0.10.5
+  * spring-aot-maven-plugin: 0.10.5
+  * native-maven-plugin: 0.9.4 
 
 </br>
 
@@ -322,16 +328,16 @@ public class GreetingController {
 }
 ```
 
-(3)pom.xmlを開き、Spring Nativeのバージョンを2.5.6、Javaバージョンを本演習環境に合わせて1.8から11に変更します。
+(3)pom.xmlを開き、Spring Bootのバージョンを2.5.6、Javaバージョンを本演習環境に合わせて1.8から11に変更します。
 ```
- <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.5.2</version>
+		<version>2.5.6</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.example</groupId>
@@ -409,7 +415,7 @@ $ curl http://localhost:8080/greeting
 (1)pom.xmlを編集します。
 <br/>
 
-<1>Springアプリケーションをnative imageとして実行するため、「spring-native」dependencyを指定します。バージョンは0.10.5に指定します。
+<1>Springアプリケーションをnative imageとして実行するため、Spring Frameworkより提供のSpring Native依存ライブラリを指定します。バージョンは0.10.5に指定します。
 ```
 <dependencies>
     <!-- ... -->
@@ -421,7 +427,7 @@ $ curl http://localhost:8080/greeting
 </dependencies>
 ```
 
-<2>SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供されているspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容を「build」ブロックに追加します。
+<2>SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供のspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容を「build」ブロックに追加します。
 ```
 <build>
     <plugins>
@@ -449,7 +455,7 @@ $ curl http://localhost:8080/greeting
 </build>
 ```
 
-<3>Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供されているnative-maven-plugin(0.9.4)をprofileブロックの中で指定します。
+<3>Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供のnative-maven-plugin(0.9.4)をprofileブロックの中で指定します。
 ```
     <profiles>
         <profile>
@@ -494,7 +500,7 @@ $ curl http://localhost:8080/greeting
     </profiles>
 ```
 
-<4>以下「spring-naitve」dependencyおよびpluginを構成するためのリポジトリー「spring-release」を追加します。
+<4>各依存ライブラリおよびプラグインのリポジトリーを追加します。
 ```
 <repositories>
 		<!-- ... -->
