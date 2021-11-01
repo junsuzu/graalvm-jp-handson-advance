@@ -281,8 +281,8 @@ Githubよりソースをダウンロードします。ダウンロード後compl
   >cd gs-rest-service/complete
   >```
 
-(2)VScodeなどのIDEを使ってcompleteフォルダーを開き、中にあるJavaソースやpom.xmlを編集します。  
-* Plain Java Objectクラスを作成します。src/main/java/com/example/restservice/Greeting.java　　
+(2)VScodeなどのIDEを使ってcompleteフォルダーを開き、中にあるJavaソース内容を確認します。  
+* Plain Java Objectクラス。src/main/java/com/example/restservice/Greeting.java　　
 ```java
 package com.example.restservice;
 
@@ -305,7 +305,7 @@ public class Greeting {
 	}
 }
 ```
-* HTTPリクエストをハンドリングするResource Controllerを作成（確認）します。src/main/java/com/example/restservice/GreetingController.java
+* HTTPリクエストをハンドリングするResource Controller。src/main/java/com/example/restservice/GreetingController.java
 ```java
 package com.example.restservice;
 
