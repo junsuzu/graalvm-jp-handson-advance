@@ -427,7 +427,7 @@ $ curl http://localhost:8080/greeting
 </dependencies>
 ```
 
-<2>SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供のspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容を「build」ブロックに追加します。
+<2>SpringアプリケーションをAOTコンパイラでビルドするため、Spring Frameworkより提供のspring-aot-maven-plugin（0.10.5）を指定します。以下のplugin内容をbuildタグに追加します。
 ```
 <build>
     <plugins>
@@ -455,7 +455,7 @@ $ curl http://localhost:8080/greeting
 </build>
 ```
 
-<3>Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供のnative-maven-plugin(0.9.4)をprofileブロックの中で指定します。
+<3>Springアプリケーションをnative imageとしてビルドするため、GraalVMより提供のnative-maven-plugin(0.9.4)をprofileタグの中で指定します。
 ```
     <profiles>
         <profile>
