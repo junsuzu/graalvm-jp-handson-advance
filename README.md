@@ -72,11 +72,11 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 <br/>
 
 (2)エディターもしくはIDE環境を使用し、上記(1)で作成したアプリケーションをカスタマイズし、Micronautコントローラーを追加します。  
-src>main>java>example.microanutパッケージの配下に新規JavaソースファイルHelloController.javaを作成します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。下記はIntelliJ IDEAからcompleteフォルダーを開き、Javaファイルを新規追加するイメージです。
+src>main>java>example.microanutパッケージの配下に新規JavaソースファイルHelloController.javaを作成します。HelloControllerはHTTPリクエストに対して、"Hello World"という文字列をリターンします。下記はcompleteフォルダーを開き、Javaファイルを新規追加するイメージです。
 
 ![Download Picture 5](images/GraalVMadvance05.JPG)
 
-既存のApplicationおよび新規作成のHelloControllerのソースはそれぞれ下記をご確認ください。IntelliJ IDEA上ソースを作成したら、Ctrl+Sで保存します。
+既存のApplicationおよび新規作成のHelloControllerのソースはそれぞれ下記をご確認ください。
   
 src/main/java/example/micronaut/Application.java
 ```java
