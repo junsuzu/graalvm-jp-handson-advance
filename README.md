@@ -123,8 +123,11 @@ public class HelloController {
 出力結果をご確認ください。
 
 ```
-BUILD SUCCESSFUL in 26s
-14 actionable tasks: 14 executed
+> Task :compileJava
+Note: Creating bean classes for 1 type elements
+
+BUILD SUCCESSFUL in 8s
+12 actionable tasks: 12 executed
 ```
 
 (5)Micronautアプリケーションを起動します。
@@ -173,7 +176,7 @@ Microanutアプリケーションの起動時間をメモに記録しておき�
 
 
   >```sh
-  >$ ./gradlew nativeComile 
+  >$ ./gradlew nativeCompile 
   >```
 <br/>
 
