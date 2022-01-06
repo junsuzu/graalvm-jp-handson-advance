@@ -1,6 +1,6 @@
 # Oracle GraalVM Enterprise ハンズオン演習 (Advance編)
 
-※更新履歴「2022-01-06 update」GraalVM EE版21.3.0およびMicronaut最新版3.2.4に合わせて更新
+※更新履歴「2022-01-06 update」GraalVM EE版21.3.0およびMicronaut最新版3.2.4に合わせて更新  
 ※更新履歴「2021-10-31 update」Spring BootおよびSpring Nativeのバージョンを最新版に合わせて更新
 ## ＜目的と対象＞：
 このハンズオン演習は、下記Oracle GraalVM Enterpriseハンズオン演習のアドバンス編になります。  
