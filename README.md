@@ -21,7 +21,7 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 * GraalVM EE 21.3.0 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
 * Docker Engine on Ubuntu ([Install Docker Engine on Ubuntu](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)) 
 * Docker Desktop for Windows ([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
-* Micronaut Linux版3.2.4(オプション) ([SDKmanによるインストール](https://micronaut.io/download.html))
+* Micronaut Linux版3.2.4 ([SDKmanによるインストール](https://micronaut.io/download.html))
 * [Docker環境設定](#付録-Docker環境設定)
 
 ※ハンズオンの参加者は事前セットアップ済みの環境でハンズオン演習を実施して頂けます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
