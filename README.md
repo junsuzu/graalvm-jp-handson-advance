@@ -123,12 +123,6 @@ public class HelloController {
 出力結果をご確認ください。
 
 ```
-Starting a Gradle Daemon (subsequent builds will be faster)
-> Task :compileJava
-Note: Creating bean classes for 1 type elements
-> Task :compileTestJava
-Note: Creating bean classes for 1 type elements
-
 BUILD SUCCESSFUL in 26s
 14 actionable tasks: 14 executed
 ```
