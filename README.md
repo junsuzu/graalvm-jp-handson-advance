@@ -1,5 +1,6 @@
 # Oracle GraalVM Enterprise ハンズオン演習 (Advance編)
 
+※更新履歴「2022-01-06 update」GraalVM EE版21.3.0およびMicronaut最新版3.2.4に合わせて更新
 ※更新履歴「2021-10-31 update」Spring BootおよびSpring Nativeのバージョンを最新版に合わせて更新
 ## ＜目的と対象＞：
 このハンズオン演習は、下記Oracle GraalVM Enterpriseハンズオン演習のアドバンス編になります。  
@@ -17,11 +18,10 @@ Basic編では、次世代Polyglot(多言語プログラミング）対応実行
 
 ## ＜前提環境／事前準備＞
 * OS: Windows10 + WSL(Windows Subsystem for Linux) + Ubuntu20.04  
-* GraalVM EE 21.2.0.1 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
+* GraalVM EE 21.3.0 Java11 Linux版 (インストール方法は[ハンズオン演習 Basic編参照](https://github.com/junsuzu/graalvm-jp-handson-basic/)) (※本演習で必要なコンポーネントはCoreパッケージおよびNative Imageのみ)
 * Docker Engine on Ubuntu ([Install Docker Engine on Ubuntu](https://nickjanetakis.com/blog/setting-up-docker-for-windows-and-wsl-to-work-flawlessly)) 
 * Docker Desktop for Windows ([Install Docker Desktop for Windows](https://docs.docker.jp/docker-for-windows/install.html)) 
-* Micronaut Linux版(オプション) ([SDKmanによるインストール](https://micronaut.io/download.html))
-* IntelliJ IDEA Community 2020.3 Windows版(オプション)
+* Micronaut Linux版3.2.4(オプション) ([SDKmanによるインストール](https://micronaut.io/download.html))
 * [Docker環境設定](#付録-Docker環境設定)
 
 ※ハンズオンの参加者は事前セットアップ済みの環境でハンズオン演習を実施して頂けます。ただし、演習が不要な方は、演習部分を視聴のみして頂くことも可能です。  
@@ -160,34 +160,40 @@ Microanutアプリケーションの起動時間をメモに記録しておき�
 
 # 1.2 MicronautアプリケーションからNative Imageを作成
 
-(1)complete配下のbuild.gradleを修正し、下記定義を追加し、ファイルを保存します。  
-この定義により、native imageを生成時に、プラットフォーム依存のC標準libc以外は、すべての依存ライブラリをアプリケーションと静的に関連付けすることができます。これにより実行時の依存ライブラリへの動的参照を最小限に抑え、実行時のオーバーヘッドを低減させる効果があります。
+(1)complete配下のbuild.gradleを修正し、下記定義を追加し、ファイルを保存します。
+この定義により、native imageを生成時に、プラットフォーム依存のC標準libc以外は、すべての依存ライブラリをアプリケーションと静的に関連付けすることができます。これにより実行時の依存ライブラリへの動的参照を最小限に抑え、実行時のオーバーヘッドを低減させる効果があります。  
 
   >```sh
-  >  nativeImage {
-  >  args("-H:+StaticExecutableWithDynamicLibC")
+  >graalvmNative {
+  >  binaries {
+  >      main {
+  >          buildArgs.add('-H:+StaticExecutableWithDynamicLibC')
+  >      }
   >  }
+  >} 
   >```
+<br/>
+
 
 (2) Gradleを使用し、Micronautサンプルアプリケーションのnative imageを作成します。  
 
 
   >```sh
-  >$ ./gradlew nativeImage  
+  >$ ./gradlew nativeComile 
   >```
 <br/>
 
 環境によってNative Imageビルドに少し時間がかかります。  
-Gradleで正常にビルドした結果、build/native-image/配下にapplicationという名前のnative imageが作成されていることが確認できます。  
+Gradleで正常にビルドした結果、build/native/nativeCompile配下にcompleteという名前のnative imageが作成されていることが確認できます。  
 
 (3)作成したMicronautアプリケーションのnative imageを動かしてみましょう。  
   >```sh
-  >$ ./build/native-image/application  
+  >$ ./build/native/nativeCompile/complete  
   >```
 
 アプリケーション起動した結果、8080番ポートでMicronautアプリケーションのサービスが短い時間で起動していることが確認できます。
 ```
-$ ./build/native-image/application
+$ ./build/native/nativeCompile/complete
 13:22:50.338 [main] INFO  io.micronaut.runtime.Micronaut - Startup completed in 571ms. Server Running: http://localhost:8080
 ```
 native imageの起動時間と上記演習1.1で通常のJavaアプリケーションの起動時間と比較し、native image起動の速さを確認します。  
@@ -212,7 +218,7 @@ native imageの起動時間と上記演習1.1で通常のJavaアプリケーシ�
 
   >```sh
   >FROM gcr.io/distroless/base
-  >COPY build/native-image/application app
+  >COPY /build/native/nativeCompile/complete app
   >ENTRYPOINT ["/app"]
   >```
 <br/>  
